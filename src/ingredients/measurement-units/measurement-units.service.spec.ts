@@ -8,6 +8,7 @@ const mockMeasurementUnitReposiory = () => ({
   findOne: jest.fn(),
   getMeasurementUnits: jest.fn(),
   delete: jest.fn(),
+  updateMeasurementUnit: jest.fn(),
 });
 
 describe('MeasurementUnitsService', () => {
@@ -47,32 +48,6 @@ describe('MeasurementUnitsService', () => {
       expect(
         measurementUnitRepository.createMeasurementUnit,
       ).toHaveBeenCalledWith(mockDto);
-      expect(result).toBe(mockResponse);
-    });
-  });
-
-  describe('getMeasurementUnitByName', () => {
-    it('should return null if no measurement unit is found', async () => {
-      const mockResponse = undefined;
-      const mockName = 'some name';
-      measurementUnitRepository.findOne.mockResolvedValue(mockResponse);
-
-      const result = await measurementUnitsService.getMeasurementUnitByName(
-        mockName,
-      );
-      expect(measurementUnitRepository.findOne).toHaveBeenCalled();
-      expect(result).toBeNull();
-    });
-
-    it('should return the measurement unit if found', async () => {
-      const mockResponse = 'some measurement unit';
-      const mockName = 'some name';
-      measurementUnitRepository.findOne.mockResolvedValue(mockResponse);
-
-      const result = await measurementUnitsService.getMeasurementUnitByName(
-        mockName,
-      );
-      expect(measurementUnitRepository.findOne).toHaveBeenCalled();
       expect(result).toBe(mockResponse);
     });
   });
@@ -146,47 +121,22 @@ describe('MeasurementUnitsService', () => {
   });
 
   describe('updateMeasurementUnit', () => {
-    it('should throw not found exception if measurement unit is not found', async () => {
-      const mockResult = undefined;
+    it('should return a measurement unit if successful', async () => {
       const mockId = 'some id';
       const mockDto = 'some data';
-      measurementUnitRepository.findOne.mockResolvedValue(mockResult);
-
-      await expect(
-        measurementUnitsService.updateMeasurementUnit(mockId, mockDto),
-      ).rejects.toThrow(NotFoundException);
-      expect(measurementUnitRepository.findOne).toHaveBeenCalledWith(mockId);
-    });
-
-    it('should call save() method to update the measurement unit properties', async () => {
-      const mockId = 'some id';
-      const mockDto = {
-        name: 'new name',
-        abbreviation: 'new abbreviation',
-        precision: 2,
-      };
-
-      const save = jest.fn().mockResolvedValue(true);
-      measurementUnitsService.getMeasurementUnitById = jest
-        .fn()
-        .mockResolvedValue({
-          name: 'old name',
-          abbreviation: 'old abbreviation',
-          precision: 1,
-          save,
-        });
+      const mockResult = 'some measurement unit';
+      measurementUnitRepository.updateMeasurementUnit.mockResolvedValue(
+        mockResult,
+      );
 
       const result = await measurementUnitsService.updateMeasurementUnit(
         mockId,
         mockDto,
       );
       expect(
-        measurementUnitsService.getMeasurementUnitById,
-      ).toHaveBeenCalledWith(mockId);
-      expect(save).toHaveBeenCalledWith();
-      expect(result.name).toBe(mockDto.name);
-      expect(result.abbreviation).toBe(mockDto.abbreviation);
-      expect(result.precision).toBe(mockDto.precision);
+        measurementUnitRepository.updateMeasurementUnit,
+      ).toHaveBeenCalledWith(mockId, mockDto);
+      expect(result).toBe(mockResult);
     });
   });
 });

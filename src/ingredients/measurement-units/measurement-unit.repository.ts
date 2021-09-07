@@ -1,6 +1,11 @@
-import { InternalServerErrorException } from '@nestjs/common';
+import {
+  ConflictException,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateMeasurementUnitDto } from './dto/create-measurement-unit.dto';
+import { UpdateMesurementUnitDto } from './dto/update-measurement-unit.dto';
 import { MeasurementUnit } from './measurement-unit.entity';
 
 @EntityRepository(MeasurementUnit)
@@ -18,8 +23,14 @@ export class MeasurementUnitRepository extends Repository<MeasurementUnit> {
     try {
       await measurementUnit.save();
     } catch (error) {
-      console.log(error.stack);
-      throw new InternalServerErrorException();
+      if (error.code === '23505') {
+        throw new ConflictException(
+          `Measurement unit '${name}' already exists`,
+        );
+      } else {
+        console.log(error.stack);
+        throw new InternalServerErrorException();
+      }
     }
 
     return measurementUnit;
@@ -33,5 +44,36 @@ export class MeasurementUnitRepository extends Repository<MeasurementUnit> {
     } catch (error) {
       throw new InternalServerErrorException();
     }
+  }
+
+  async updateMeasurementUnit(
+    id: string,
+    updateMeasurementUnitDto: UpdateMesurementUnitDto,
+  ): Promise<MeasurementUnit> {
+    const { name, abbreviation, precision } = updateMeasurementUnitDto;
+
+    const measurementUnit = await this.findOne(id);
+    if (!measurementUnit) {
+      throw new NotFoundException();
+    }
+
+    measurementUnit.name = name;
+    measurementUnit.abbreviation = abbreviation;
+    measurementUnit.precision = precision;
+
+    try {
+      await measurementUnit.save();
+    } catch (error) {
+      if (error.code === '23505') {
+        throw new ConflictException(
+          `Measurement unit '${name}' already exists`,
+        );
+      } else {
+        console.log(error.stack);
+        throw new InternalServerErrorException();
+      }
+    }
+
+    return measurementUnit;
   }
 }

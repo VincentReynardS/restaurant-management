@@ -20,20 +20,6 @@ export class MeasurementUnitsService {
     );
   }
 
-  async getMeasurementUnitByName(
-    name: string,
-  ): Promise<MeasurementUnit | null> {
-    const measurementUnit = await this.measurementUnitRepository.findOne({
-      where: { name },
-    });
-
-    if (!measurementUnit) {
-      return null;
-    }
-
-    return measurementUnit;
-  }
-
   async getMeasurementUnitById(id: string): Promise<MeasurementUnit> {
     const measurementUnit = await this.measurementUnitRepository.findOne(id);
 
@@ -60,14 +46,9 @@ export class MeasurementUnitsService {
     id: string,
     updateMeasurementUnitDto: UpdateMesurementUnitDto,
   ): Promise<MeasurementUnit> {
-    const { name, abbreviation, precision } = updateMeasurementUnitDto;
-
-    const measurementUnit = await this.getMeasurementUnitById(id);
-    measurementUnit.name = name;
-    measurementUnit.abbreviation = abbreviation;
-    measurementUnit.precision = precision;
-    await measurementUnit.save();
-
-    return measurementUnit;
+    return this.measurementUnitRepository.updateMeasurementUnit(
+      id,
+      updateMeasurementUnitDto,
+    );
   }
 }

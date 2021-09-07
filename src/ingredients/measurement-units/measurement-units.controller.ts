@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   Patch,
   Post,
@@ -24,15 +25,6 @@ export class MeasurementUnitsController {
   async createMeasurementUnit(
     @Body() createMeasurementUnitDto: CreateMeasurementUnitDto,
   ): Promise<MeasurementUnit> {
-    const { name } = createMeasurementUnitDto;
-
-    const exists = await this.measurementUnitsService.getMeasurementUnitByName(
-      name,
-    );
-    if (exists) {
-      throw new ConflictException(`Measurement unit '${name}' already exists`);
-    }
-
     return this.measurementUnitsService.createMeasurementUnit(
       createMeasurementUnitDto,
     );
@@ -43,12 +35,27 @@ export class MeasurementUnitsController {
     return this.measurementUnitsService.getMeasurementUnits();
   }
 
-  @Delete('')
-  async deleteMeasurementUnitById(@Body() id: string): Promise<void> {
+  @Delete('/:id')
+  async deleteMeasurementUnitById(@Param('id') id: string): Promise<void> {
+    const measurementUnit = await this.measurementUnitsService.getMeasurementUnitById(
+      id,
+    );
+
+    if (!measurementUnit) {
+      throw new NotFoundException(`Measurement unit with id '${id}' not found`);
+    }
+
+    if (measurementUnit.ingredientsAssigned !== 0) {
+      throw new ConflictException(
+        `There are ${measurementUnit.ingredientsAssigned} ingredients which still use this measurement unit`,
+      );
+    }
+
     return this.measurementUnitsService.deleteMeasurementUnitById(id);
   }
 
   @Patch('/:id')
+  @UsePipes(ValidationPipe)
   async updateMeasurementUnit(
     @Param('id') id: string,
     @Body() updateMeasurementUnitDto: UpdateMesurementUnitDto,

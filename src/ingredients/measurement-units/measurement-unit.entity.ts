@@ -11,7 +11,7 @@ export class MeasurementUnit extends BaseEntity {
   @PrimaryGeneratedColumn('uuid', { name: 'measurement_unit_id' })
   id: string;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
   @Column({ type: 'integer' })
@@ -19,4 +19,7 @@ export class MeasurementUnit extends BaseEntity {
 
   @Column()
   abbreviation: string;
+
+  @Column({ type: 'integer', name: 'ingredients_assigned', default: 0 })
+  ingredientsAssigned: number;
 }

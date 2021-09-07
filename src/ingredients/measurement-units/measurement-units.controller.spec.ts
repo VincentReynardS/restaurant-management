@@ -1,11 +1,11 @@
-import { ConflictException } from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MeasurementUnitsController } from './measurement-units.controller';
 import { MeasurementUnitsService } from './measurement-units.service';
 
 const mockmeasurementUnitsService = () => ({
-  getMeasurementUnitByName: jest.fn(),
   getMeasurementUnits: jest.fn(),
+  getMeasurementUnitById: jest.fn(),
   createMeasurementUnit: jest.fn(),
   deleteMeasurementUnitById: jest.fn(),
   updateMeasurementUnit: jest.fn(),
@@ -46,25 +46,21 @@ describe('measurementUnitsController', () => {
     });
 
     it('should throw conflict exception if measurement unit already exists', async () => {
-      measurementUnitsService.getMeasurementUnitByName.mockResolvedValue(
-        'some measurement unit',
+      measurementUnitsService.createMeasurementUnit.mockRejectedValue(
+        new ConflictException(),
       );
 
       await expect(
         measurementUnitsController.createMeasurementUnit(mockDto),
       ).rejects.toThrow(ConflictException);
       expect(
-        measurementUnitsService.getMeasurementUnitByName,
-      ).toHaveBeenCalledWith(mockDto.name);
-      expect(
         measurementUnitsService.createMeasurementUnit,
-      ).not.toHaveBeenCalled();
+      ).toHaveBeenCalledWith(mockDto);
     });
 
     it('should return the created measurement unit if successful', async () => {
       const mockResult = 'some measurement unit';
 
-      measurementUnitsService.getMeasurementUnitByName.mockResolvedValue(null);
       measurementUnitsService.createMeasurementUnit.mockResolvedValue(
         mockResult,
       );
@@ -73,9 +69,8 @@ describe('measurementUnitsController', () => {
         mockDto,
       );
       expect(
-        measurementUnitsService.getMeasurementUnitByName,
-      ).toHaveBeenCalledWith(mockDto.name);
-      expect(measurementUnitsService.createMeasurementUnit).toHaveBeenCalled();
+        measurementUnitsService.createMeasurementUnit,
+      ).toHaveBeenCalledWith(mockDto);
       expect(result).toBe(mockResult);
     });
   });
@@ -92,12 +87,54 @@ describe('measurementUnitsController', () => {
   });
 
   describe('deleteMeasurementUnitById', () => {
+    let mockId;
+
+    beforeEach(() => {
+      mockId = 'some id';
+    });
+
     it('should call measurementUnitsService.deleteMeasurementUnitById() to delete', async () => {
-      const mockId = 'some id';
+      const mockData = {
+        ingredientsAssigned: 0,
+      };
+      measurementUnitsService.getMeasurementUnitById.mockResolvedValue(
+        mockData,
+      );
+
       await measurementUnitsController.deleteMeasurementUnitById(mockId);
       expect(
         measurementUnitsService.deleteMeasurementUnitById,
       ).toHaveBeenCalledWith(mockId);
+    });
+
+    it('should throw not found exception if measurement unit is not found', async () => {
+      const mockData = undefined;
+      measurementUnitsService.getMeasurementUnitById.mockResolvedValue(
+        mockData,
+      );
+
+      await expect(
+        measurementUnitsController.deleteMeasurementUnitById(mockId),
+      ).rejects.toThrow(NotFoundException);
+      expect(
+        measurementUnitsService.deleteMeasurementUnitById,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('should throw conflict exception if measurement unit is still being used by at least one ingredient', async () => {
+      const mockData = {
+        ingredientsAssigned: 5,
+      };
+      measurementUnitsService.getMeasurementUnitById.mockResolvedValue(
+        mockData,
+      );
+
+      await expect(
+        measurementUnitsController.deleteMeasurementUnitById(mockId),
+      ).rejects.toThrow(ConflictException);
+      expect(
+        measurementUnitsService.deleteMeasurementUnitById,
+      ).not.toHaveBeenCalled();
     });
   });
 
