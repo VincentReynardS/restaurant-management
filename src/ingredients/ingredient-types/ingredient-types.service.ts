@@ -1,6 +1,6 @@
 import {
-  ConflictException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -42,7 +42,7 @@ export class IngredientTypesService {
     const result = await this.ingredientTypeRepository.delete(id);
 
     if (result.affected === 0) {
-      throw new NotFoundException();
+      throw new NotFoundException(`Ingredient type with id '${id}' not found`);
     }
   }
 
@@ -54,5 +54,22 @@ export class IngredientTypesService {
       id,
       updateIngredientTypeDto,
     );
+  }
+
+  async updateIngredientTypeIngredientsAssigned(
+    id: string,
+    valueAdded: number,
+  ): Promise<IngredientType> {
+    const ingredientType = await this.getIngredientTypeById(id);
+
+    ingredientType.ingredientsAssigned += valueAdded;
+
+    try {
+      await ingredientType.save();
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+
+    return ingredientType;
   }
 }

@@ -11,6 +11,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { AssignMeasurementUnitToIngredientDto } from './dto/assign-measurement-unit-to-ingredient.dto';
 import { CreateMeasurementUnitDto } from './dto/create-measurement-unit.dto';
 import { UpdateMesurementUnitDto } from './dto/update-measurement-unit.dto';
 import { MeasurementUnit } from './measurement-unit.entity';
@@ -63,6 +64,16 @@ export class MeasurementUnitsController {
     return this.measurementUnitsService.updateMeasurementUnit(
       id,
       updateMeasurementUnitDto,
+    );
+  }
+
+  @Post('/assign-to-ingredient')
+  async assignToIngredient(
+    @Body(ValidationPipe)
+    assignToIngredientDto: AssignMeasurementUnitToIngredientDto,
+  ): Promise<void> {
+    return this.measurementUnitsService.assignToIngredient(
+      assignToIngredientDto,
     );
   }
 }

@@ -2,9 +2,10 @@ import {
   BaseEntity,
   Column,
   Entity,
-  PrimaryColumn,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Ingredient } from '../ingredient.entity';
 
 @Entity({ name: 'measurement_units' })
 export class MeasurementUnit extends BaseEntity {
@@ -22,4 +23,11 @@ export class MeasurementUnit extends BaseEntity {
 
   @Column({ type: 'integer', name: 'ingredients_assigned', default: 0 })
   ingredientsAssigned: number;
+
+  @OneToMany(
+    type => Ingredient,
+    ingredient => ingredient.measurementUnit,
+    { eager: false },
+  )
+  ingredients: Ingredient[];
 }

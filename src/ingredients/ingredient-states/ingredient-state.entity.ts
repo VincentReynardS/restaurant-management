@@ -7,9 +7,9 @@ import {
 } from 'typeorm';
 import { Ingredient } from '../ingredient.entity';
 
-@Entity({ name: 'ingredient_types' })
-export class IngredientType extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid', { name: 'ingredient_type_id' })
+@Entity({ name: 'ingredient_states' })
+export class IngredientState extends BaseEntity {
+  @PrimaryGeneratedColumn('uuid', { name: 'ingredient_state_id' })
   id: string;
 
   @Column({ unique: true })
@@ -20,7 +20,7 @@ export class IngredientType extends BaseEntity {
 
   @OneToMany(
     type => Ingredient,
-    ingredient => ingredient.ingredientType,
+    ingredient => ingredient.ingredientState,
   )
   ingredients: Ingredient[];
 }

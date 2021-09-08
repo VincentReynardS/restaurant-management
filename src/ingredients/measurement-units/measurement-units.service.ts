@@ -1,5 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { IngredientRepository } from '../ingredient.repository';
+import { AssignMeasurementUnitToIngredientDto } from './dto/assign-measurement-unit-to-ingredient.dto';
 import { CreateMeasurementUnitDto } from './dto/create-measurement-unit.dto';
 import { UpdateMesurementUnitDto } from './dto/update-measurement-unit.dto';
 import { MeasurementUnit } from './measurement-unit.entity';
@@ -10,6 +16,8 @@ export class MeasurementUnitsService {
   constructor(
     @InjectRepository(MeasurementUnitRepository)
     private measurementUnitRepository: MeasurementUnitRepository,
+    @InjectRepository(IngredientRepository)
+    private ingredientRepository: IngredientRepository,
   ) {}
 
   async createMeasurementUnit(
@@ -50,5 +58,58 @@ export class MeasurementUnitsService {
       id,
       updateMeasurementUnitDto,
     );
+  }
+
+  async updateMeasurementUnitIngredientsAssigned(
+    id: string,
+    valueAdded: number,
+  ): Promise<MeasurementUnit> {
+    const measurementUnit = await this.getMeasurementUnitById(id);
+
+    measurementUnit.ingredientsAssigned += valueAdded;
+
+    try {
+      await measurementUnit.save();
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+
+    return measurementUnit;
+  }
+
+  async assignToIngredient(
+    assignToIngredientDto: AssignMeasurementUnitToIngredientDto,
+  ): Promise<void> {
+    const { measurementUnitId, ingredientIds } = assignToIngredientDto;
+    const newMeasurementUnit = await this.getMeasurementUnitById(
+      measurementUnitId,
+    );
+    const ingredients = await this.ingredientRepository.getIngredients({
+      ids: ingredientIds,
+    });
+
+    for (const ingredient of ingredients) {
+      const oldMeasurementUnitId = ingredient.measurementUnit.id;
+      const newMeasurementUnitId = newMeasurementUnit.id;
+
+      if (oldMeasurementUnitId !== newMeasurementUnitId) {
+        await Promise.all([
+          this.updateMeasurementUnitIngredientsAssigned(
+            oldMeasurementUnitId,
+            -1,
+          ),
+          this.updateMeasurementUnitIngredientsAssigned(measurementUnitId, 1),
+        ]);
+
+        ingredient.measurementUnit = newMeasurementUnit;
+
+        try {
+          ingredient.save();
+        } catch (error) {
+          console.log(error.stack);
+          throw new InternalServerErrorException();
+        }
+      }
+    }
   }
 }

@@ -42,7 +42,9 @@ export class IngredientTypesController {
     );
 
     if (!ingredientType) {
-      throw new NotFoundException();
+      throw new NotFoundException(
+        `Ingredient type with id '${id}' is not found`,
+      );
     }
 
     if (ingredientType.ingredientsAssigned !== 0) {

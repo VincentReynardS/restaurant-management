@@ -97,7 +97,7 @@ describe('IngredientTypesController', () => {
       ).toHaveBeenCalledWith(mockId);
     });
 
-    it('should throw not found exception if measurement unit is not found', async () => {
+    it('should throw not found exception if ingredient type is not found', async () => {
       const mockData = undefined;
       ingredientTypesService.getIngredientTypeById.mockResolvedValue(mockData);
 
@@ -109,7 +109,7 @@ describe('IngredientTypesController', () => {
       ).not.toHaveBeenCalled();
     });
 
-    it('should throw conflict exception if measurement unit is still being used by at least one ingredient', async () => {
+    it('should throw conflict exception if ingredient type is still being used by at least one ingredient', async () => {
       const mockData = {
         ingredientsAssigned: 5,
       };
@@ -128,7 +128,7 @@ describe('IngredientTypesController', () => {
     it('should return an ingredient type if successful', async () => {
       const mockId = 'some id';
       const mockDto = 'some data';
-      const mockResult = 'some measurement unit';
+      const mockResult = 'some ingredient state';
       ingredientTypesService.updateIngredientType.mockResolvedValue(mockResult);
 
       const result = await ingredientTypesService.updateIngredientType(

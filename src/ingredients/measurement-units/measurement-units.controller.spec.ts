@@ -9,6 +9,7 @@ const mockmeasurementUnitsService = () => ({
   createMeasurementUnit: jest.fn(),
   deleteMeasurementUnitById: jest.fn(),
   updateMeasurementUnit: jest.fn(),
+  assignToIngredient: jest.fn(),
 });
 
 describe('measurementUnitsController', () => {
@@ -155,6 +156,17 @@ describe('measurementUnitsController', () => {
         measurementUnitsService.updateMeasurementUnit,
       ).toHaveBeenCalledWith(mockId, mockDto);
       expect(result).toBe(mockResult);
+    });
+  });
+
+  describe('assignToIngredient', () => {
+    it('should call measurementUnitsService.assignToIngredient()', async () => {
+      const mockDto = 'some data';
+
+      await measurementUnitsController.assignToIngredient(mockDto);
+      expect(measurementUnitsService.assignToIngredient).toHaveBeenCalledWith(
+        mockDto,
+      );
     });
   });
 });

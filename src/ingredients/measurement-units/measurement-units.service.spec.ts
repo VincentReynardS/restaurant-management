@@ -1,5 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { IngredientRepository } from '../ingredient.repository';
 import { MeasurementUnitRepository } from './measurement-unit.repository';
 import { MeasurementUnitsService } from './measurement-units.service';
 
@@ -9,11 +10,16 @@ const mockMeasurementUnitReposiory = () => ({
   getMeasurementUnits: jest.fn(),
   delete: jest.fn(),
   updateMeasurementUnit: jest.fn(),
+  assignMeasurementUnitToIngredient: jest.fn(),
+});
+const mockIngredientRepository = () => ({
+  getIngredients: jest.fn(),
 });
 
 describe('MeasurementUnitsService', () => {
   let measurementUnitsService;
   let measurementUnitRepository;
+  let ingredientRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -23,6 +29,7 @@ describe('MeasurementUnitsService', () => {
           provide: MeasurementUnitRepository,
           useFactory: mockMeasurementUnitReposiory,
         },
+        { provide: IngredientRepository, useFactory: mockIngredientRepository },
       ],
     }).compile();
 
@@ -31,6 +38,9 @@ describe('MeasurementUnitsService', () => {
     );
     measurementUnitRepository = module.get<MeasurementUnitRepository>(
       MeasurementUnitRepository,
+    );
+    ingredientRepository = module.get<IngredientRepository>(
+      IngredientRepository,
     );
   });
 
@@ -137,6 +147,71 @@ describe('MeasurementUnitsService', () => {
         measurementUnitRepository.updateMeasurementUnit,
       ).toHaveBeenCalledWith(mockId, mockDto);
       expect(result).toBe(mockResult);
+    });
+  });
+
+  describe('updateMeasurementUnitIngredientsAssigned', () => {
+    it('should add value to ingredientsAssgined', async () => {
+      const mockId = 'some id';
+      const save = jest.fn();
+      const mockMeasurementUnit = {
+        ingredientsAssigned: 0,
+        save,
+      };
+      measurementUnitsService.getMeasurementUnitById = jest
+        .fn()
+        .mockResolvedValue(mockMeasurementUnit);
+
+      const result = await measurementUnitsService.updateMeasurementUnitIngredientsAssigned(
+        mockId,
+        1,
+      );
+      expect(
+        measurementUnitsService.getMeasurementUnitById,
+      ).toHaveBeenCalledWith(mockId);
+      expect(save).toHaveBeenCalled();
+      expect(result.ingredientsAssigned).toBe(1);
+    });
+  });
+
+  describe('assignToIngredient', () => {
+    it("should update the new and old measurement unit's 'ingredients assigned' property", async () => {
+      const mockDto = {
+        measurementUnitId: 'some measurement unit id',
+        ingredientIds: ['ingredient id 1', 'ingredient id 2'],
+      };
+      const mockNewMeasurementUnit = {
+        id: 'measurement unit id 1',
+      };
+      const save = jest.fn();
+      const mockIngredients = [
+        {
+          measurementUnit: {
+            id: 'measurement unit id 1',
+          },
+          save,
+        },
+        {
+          measurementUnit: {
+            id: 'measurement unit id 2',
+          },
+          save,
+        },
+      ];
+      measurementUnitsService.getMeasurementUnitById = jest
+        .fn()
+        .mockResolvedValue(mockNewMeasurementUnit);
+      measurementUnitsService.updateMeasurementUnitIngredientsAssigned = jest.fn();
+      ingredientRepository.getIngredients.mockResolvedValue(mockIngredients);
+
+      await measurementUnitsService.assignToIngredient(mockDto);
+      expect(
+        measurementUnitsService.updateMeasurementUnitIngredientsAssigned,
+      ).toHaveBeenCalledTimes(2);
+      expect(mockIngredients[1].measurementUnit.id).toEqual(
+        mockNewMeasurementUnit.id,
+      );
+      expect(save).toHaveBeenCalledTimes(1);
     });
   });
 });

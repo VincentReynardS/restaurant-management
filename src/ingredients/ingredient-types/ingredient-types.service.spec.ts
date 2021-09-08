@@ -54,7 +54,7 @@ describe('IngredientTypesService', () => {
       expect(result).toBe(mockResult);
     });
 
-    it('should throw coflict exception if ingredient type already exists', async () => {
+    it('should throw conflict exception if ingredient type already exists', async () => {
       const mockResult = new ConflictException();
       ingredientTypeRepository.createIngredientType.mockRejectedValue(
         mockResult,
@@ -120,7 +120,7 @@ describe('IngredientTypesService', () => {
       expect(ingredientTypeRepository.delete).toHaveBeenCalledWith(mockId);
     });
 
-    it('should throw not found exception if no measurement unit is found', async () => {
+    it('should throw not found exception if no ingredient type is found', async () => {
       const mockDeleteResult = {
         affected: 0,
       };
@@ -137,7 +137,7 @@ describe('IngredientTypesService', () => {
     it('should return an ingredient type if successful', async () => {
       const mockId = 'some id';
       const mockDto = 'some data';
-      const mockResult = 'some measurement unit';
+      const mockResult = 'some ingredient type';
       ingredientTypeRepository.updateIngredientType.mockResolvedValue(
         mockResult,
       );
@@ -150,6 +150,30 @@ describe('IngredientTypesService', () => {
         ingredientTypeRepository.updateIngredientType,
       ).toHaveBeenCalledWith(mockId, mockDto);
       expect(result).toBe(mockResult);
+    });
+  });
+
+  describe('updateIngredientTypeIngredientsAssigned', () => {
+    it('should add value to ingredientsAssigned', async () => {
+      const mockId = 'some id';
+      const save = jest.fn();
+      const mockIngredientType = {
+        ingredientsAssigned: 0,
+        save,
+      };
+      ingredientTypesService.getIngredientTypeById = jest
+        .fn()
+        .mockResolvedValue(mockIngredientType);
+
+      const result = await ingredientTypesService.updateIngredientTypeIngredientsAssigned(
+        mockId,
+        1,
+      );
+      expect(ingredientTypesService.getIngredientTypeById).toHaveBeenCalledWith(
+        mockId,
+      );
+      expect(save).toHaveBeenCalled();
+      expect(result.ingredientsAssigned).toBe(1);
     });
   });
 });
