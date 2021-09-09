@@ -4,6 +4,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { IngredientRepository } from '../ingredient.repository';
+import { AssignIngredientStateToIngredientDto } from './dto/assign-ingredient-state-to-ingredient.dto';
 import { CreateIngredientStateDto } from './dto/create-ingredient-state.dto';
 import { UpdateIngredientStateDto } from './dto/update-ingredient-state.dto';
 import { IngredientState } from './ingredient-state.entity';
@@ -14,6 +16,8 @@ export class IngredientStatesService {
   constructor(
     @InjectRepository(IngredientStateRepository)
     private ingredientStateRepository: IngredientStateRepository,
+    @InjectRepository(IngredientRepository)
+    private ingredientRepository: IngredientRepository,
   ) {}
 
   async createIngredientState(
@@ -71,5 +75,41 @@ export class IngredientStatesService {
     }
 
     return ingredientState;
+  }
+
+  async assignToIngredient(
+    assignToIngredientDto: AssignIngredientStateToIngredientDto,
+  ): Promise<void> {
+    const { ingredientStateId, ingredientIds } = assignToIngredientDto;
+    const newIngredientState = await this.getIngredientStateById(
+      ingredientStateId,
+    );
+    const ingredients = await this.ingredientRepository.getIngredients({
+      ids: ingredientIds,
+    });
+
+    for (const ingredient of ingredients) {
+      const oldIngredientStateId = ingredient.ingredientState.id;
+      const newIngredientStateId = newIngredientState.id;
+
+      if (oldIngredientStateId !== newIngredientStateId) {
+        await Promise.all([
+          this.updateIngredientStateIngredientsAssigned(
+            oldIngredientStateId,
+            -1,
+          ),
+          this.updateIngredientStateIngredientsAssigned(ingredientStateId, 1),
+        ]);
+
+        ingredient.ingredientState = newIngredientState;
+
+        try {
+          ingredient.save();
+        } catch (error) {
+          console.log(error.stack);
+          throw new InternalServerErrorException();
+        }
+      }
+    }
   }
 }

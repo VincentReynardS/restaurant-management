@@ -9,6 +9,7 @@ const mockIngredientStatesService = () => ({
   getIngredientStateById: jest.fn(),
   deleteIngredientStateById: jest.fn(),
   updateIngredientState: jest.fn(),
+  assignToIngredient: jest.fn(),
 });
 
 describe('IngredientStatesController', () => {
@@ -132,6 +133,17 @@ describe('IngredientStatesController', () => {
         ingredientStatesService.updateIngredientState,
       ).toHaveBeenCalledWith(mockId, mockDto);
       expect(result).toBe(mockResult);
+    });
+  });
+
+  describe('assignToIngredient', () => {
+    it('should call ingredientStatesService.assignToIngredient()', async () => {
+      const mockDto = 'some data';
+
+      await ingredientStatesController.assignToIngredient(mockDto);
+      expect(ingredientStatesService.assignToIngredient).toHaveBeenCalledWith(
+        mockDto,
+      );
     });
   });
 });

@@ -1,5 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { IngredientRepository } from '../ingredient.repository';
 import { IngredientState } from './ingredient-state.entity';
 import { IngredientStateRepository } from './ingredient-state.repository';
 import { IngredientStatesService } from './ingredient-states.service';
@@ -11,10 +12,14 @@ const mockIngredientStateRepository = () => ({
   delete: jest.fn(),
   updateIngredientState: jest.fn(),
 });
+const mockIngredientRepository = () => ({
+  getIngredients: jest.fn(),
+});
 
 describe('IngredientStatesService', () => {
   let ingredientStateRepository;
   let ingredientStatesService;
+  let ingredientRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -24,6 +29,7 @@ describe('IngredientStatesService', () => {
           provide: IngredientStateRepository,
           useFactory: mockIngredientStateRepository,
         },
+        { provide: IngredientRepository, useFactory: mockIngredientRepository },
       ],
     }).compile();
 
@@ -32,6 +38,9 @@ describe('IngredientStatesService', () => {
     );
     ingredientStatesService = module.get<IngredientStatesService>(
       IngredientStatesService,
+    );
+    ingredientRepository = module.get<IngredientRepository>(
+      IngredientRepository,
     );
   });
 
@@ -162,6 +171,47 @@ describe('IngredientStatesService', () => {
       ).toHaveBeenCalledWith(mockId);
       expect(save).toHaveBeenCalled();
       expect(result.ingredientsAssigned).toBe(1);
+    });
+  });
+
+  describe('assignToIngredient', () => {
+    it("should update the new and old ingredient state's 'ingredients assigned' property", async () => {
+      const mockDto = {
+        ingredientStateId: 'some ingredient state id',
+        ingredientIds: ['ingredient id 1', 'ingredient id 2'],
+      };
+      const mockNewIngredientState = {
+        id: 'ingredient state id 1',
+      };
+      const save = jest.fn();
+      const mockIngredients = [
+        {
+          ingredientState: {
+            id: 'ingredient state id 1',
+          },
+          save,
+        },
+        {
+          ingredientState: {
+            id: 'ingredient state id 2',
+          },
+          save,
+        },
+      ];
+      ingredientStatesService.getIngredientStateById = jest
+        .fn()
+        .mockResolvedValue(mockNewIngredientState);
+      ingredientStatesService.updateIngredientStateIngredientsAssigned = jest.fn();
+      ingredientRepository.getIngredients.mockResolvedValue(mockIngredients);
+
+      await ingredientStatesService.assignToIngredient(mockDto);
+      expect(
+        ingredientStatesService.updateIngredientStateIngredientsAssigned,
+      ).toHaveBeenCalledTimes(2);
+      expect(mockIngredients[1].ingredientState.id).toEqual(
+        mockNewIngredientState.id,
+      );
+      expect(save).toHaveBeenCalledTimes(1);
     });
   });
 });
