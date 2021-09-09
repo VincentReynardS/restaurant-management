@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Ingredient } from '../ingredient.entity';
 import { IngredientRepository } from '../ingredient.repository';
 import { AssignIngredientStateToIngredientDto } from './dto/assign-ingredient-state-to-ingredient.dto';
 import { CreateIngredientStateDto } from './dto/create-ingredient-state.dto';
@@ -78,19 +79,12 @@ export class IngredientStatesService {
   }
 
   async assignToIngredient(
-    assignToIngredientDto: AssignIngredientStateToIngredientDto,
+    ingredientState: IngredientState,
+    ingredients: Ingredient[],
   ): Promise<void> {
-    const { ingredientStateId, ingredientIds } = assignToIngredientDto;
-    const newIngredientState = await this.getIngredientStateById(
-      ingredientStateId,
-    );
-    const ingredients = await this.ingredientRepository.getIngredients({
-      ids: ingredientIds,
-    });
-
     for (const ingredient of ingredients) {
       const oldIngredientStateId = ingredient.ingredientState.id;
-      const newIngredientStateId = newIngredientState.id;
+      const newIngredientStateId = ingredientState.id;
 
       if (oldIngredientStateId !== newIngredientStateId) {
         await Promise.all([
@@ -98,10 +92,13 @@ export class IngredientStatesService {
             oldIngredientStateId,
             -1,
           ),
-          this.updateIngredientStateIngredientsAssigned(ingredientStateId, 1),
+          this.updateIngredientStateIngredientsAssigned(
+            newIngredientStateId,
+            1,
+          ),
         ]);
 
-        ingredient.ingredientState = newIngredientState;
+        ingredient.ingredientState = ingredientState;
 
         try {
           ingredient.save();

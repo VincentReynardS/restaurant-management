@@ -192,10 +192,6 @@ describe('IngredientTypesService', () => {
 
   describe('assignToIngredient', () => {
     it("should update the new and old ingredient type's 'ingredients assigned' property", async () => {
-      const mockDto = {
-        ingredientTypeId: 'some ingredient type id',
-        ingredientIds: ['ingredient id 1', 'ingredient id 2'],
-      };
       const mockNewIngredientType = {
         id: 'ingredient type id 1',
       };
@@ -214,13 +210,12 @@ describe('IngredientTypesService', () => {
           save,
         },
       ];
-      ingredientTypesService.getIngredientTypeById = jest
-        .fn()
-        .mockResolvedValue(mockNewIngredientType);
       ingredientTypesService.updateIngredientTypeIngredientsAssigned = jest.fn();
-      ingredientRepository.getIngredients.mockResolvedValue(mockIngredients);
 
-      await ingredientTypesService.assignToIngredient(mockDto);
+      await ingredientTypesService.assignToIngredient(
+        mockNewIngredientType,
+        mockIngredients,
+      );
       expect(
         ingredientTypesService.updateIngredientTypeIngredientsAssigned,
       ).toHaveBeenCalledTimes(2);

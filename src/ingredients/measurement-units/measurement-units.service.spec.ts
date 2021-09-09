@@ -176,10 +176,6 @@ describe('MeasurementUnitsService', () => {
 
   describe('assignToIngredient', () => {
     it("should update the new and old measurement unit's 'ingredients assigned' property", async () => {
-      const mockDto = {
-        measurementUnitId: 'some measurement unit id',
-        ingredientIds: ['ingredient id 1', 'ingredient id 2'],
-      };
       const mockNewMeasurementUnit = {
         id: 'measurement unit id 1',
       };
@@ -198,13 +194,12 @@ describe('MeasurementUnitsService', () => {
           save,
         },
       ];
-      measurementUnitsService.getMeasurementUnitById = jest
-        .fn()
-        .mockResolvedValue(mockNewMeasurementUnit);
       measurementUnitsService.updateMeasurementUnitIngredientsAssigned = jest.fn();
-      ingredientRepository.getIngredients.mockResolvedValue(mockIngredients);
 
-      await measurementUnitsService.assignToIngredient(mockDto);
+      await measurementUnitsService.assignToIngredient(
+        mockNewMeasurementUnit,
+        mockIngredients,
+      );
       expect(
         measurementUnitsService.updateMeasurementUnitIngredientsAssigned,
       ).toHaveBeenCalledTimes(2);

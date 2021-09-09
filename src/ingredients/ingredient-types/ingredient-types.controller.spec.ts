@@ -1,5 +1,6 @@
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { IngredientsService } from '../ingredients.service';
 import { IngredientTypesController } from './ingredient-types.controller';
 import { IngredientTypesService } from './ingredient-types.service';
 
@@ -11,10 +12,14 @@ const mockIngredientTypesService = () => ({
   updateIngredientType: jest.fn(),
   assignToIngredient: jest.fn(),
 });
+const mockIngredientsService = () => ({
+  getIngredients: jest.fn(),
+});
 
 describe('IngredientTypesController', () => {
   let ingredientTypesService;
   let ingredientTypesController;
+  let ingredientsService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -23,6 +28,10 @@ describe('IngredientTypesController', () => {
         {
           provide: IngredientTypesService,
           useFactory: mockIngredientTypesService,
+        },
+        {
+          provide: IngredientsService,
+          useFactory: mockIngredientsService,
         },
       ],
     }).compile();
@@ -33,6 +42,7 @@ describe('IngredientTypesController', () => {
     ingredientTypesController = module.get<IngredientTypesController>(
       IngredientTypesController,
     );
+    ingredientsService = module.get<IngredientsService>(IngredientsService);
   });
 
   describe('createIngredientType', () => {
@@ -147,10 +157,17 @@ describe('IngredientTypesController', () => {
   describe('assignToIngredient', () => {
     it('should call ingredientTypesService.assignToIngredient()', async () => {
       const mockDto = 'some data';
+      const mockNewIngredientType = 'some measurement unit';
+      const mockIngredients = ['some ingredients'];
+      ingredientTypesService.getIngredientTypeById = jest
+        .fn()
+        .mockResolvedValue(mockNewIngredientType);
+      ingredientsService.getIngredients.mockResolvedValue(mockIngredients);
 
       await ingredientTypesController.assignToIngredient(mockDto);
       expect(ingredientTypesService.assignToIngredient).toHaveBeenCalledWith(
-        mockDto,
+        mockNewIngredientType,
+        mockIngredients,
       );
     });
   });

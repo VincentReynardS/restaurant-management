@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Ingredient } from '../ingredient.entity';
 import { IngredientRepository } from '../ingredient.repository';
 import { AssignMeasurementUnitToIngredientDto } from './dto/assign-measurement-unit-to-ingredient.dto';
 import { CreateMeasurementUnitDto } from './dto/create-measurement-unit.dto';
@@ -78,19 +79,12 @@ export class MeasurementUnitsService {
   }
 
   async assignToIngredient(
-    assignToIngredientDto: AssignMeasurementUnitToIngredientDto,
+    measurementUnit: MeasurementUnit,
+    targetIngredients: Ingredient[],
   ): Promise<void> {
-    const { measurementUnitId, ingredientIds } = assignToIngredientDto;
-    const newMeasurementUnit = await this.getMeasurementUnitById(
-      measurementUnitId,
-    );
-    const ingredients = await this.ingredientRepository.getIngredients({
-      ids: ingredientIds,
-    });
-
-    for (const ingredient of ingredients) {
+    for (const ingredient of targetIngredients) {
       const oldMeasurementUnitId = ingredient.measurementUnit.id;
-      const newMeasurementUnitId = newMeasurementUnit.id;
+      const newMeasurementUnitId = measurementUnit.id;
 
       if (oldMeasurementUnitId !== newMeasurementUnitId) {
         await Promise.all([
@@ -98,10 +92,13 @@ export class MeasurementUnitsService {
             oldMeasurementUnitId,
             -1,
           ),
-          this.updateMeasurementUnitIngredientsAssigned(measurementUnitId, 1),
+          this.updateMeasurementUnitIngredientsAssigned(
+            newMeasurementUnitId,
+            1,
+          ),
         ]);
 
-        ingredient.measurementUnit = newMeasurementUnit;
+        ingredient.measurementUnit = measurementUnit;
 
         try {
           ingredient.save();

@@ -1,5 +1,6 @@
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { IngredientsService } from '../ingredients.service';
 import { IngredientStatesController } from './ingredient-states.controller';
 import { IngredientStatesService } from './ingredient-states.service';
 
@@ -11,10 +12,14 @@ const mockIngredientStatesService = () => ({
   updateIngredientState: jest.fn(),
   assignToIngredient: jest.fn(),
 });
+const mockIngredientsService = () => ({
+  getIngredients: jest.fn(),
+});
 
 describe('IngredientStatesController', () => {
   let ingredientStatesService;
   let ingredientStatesController;
+  let ingredientsService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -23,6 +28,10 @@ describe('IngredientStatesController', () => {
         {
           provide: IngredientStatesService,
           useFactory: mockIngredientStatesService,
+        },
+        {
+          provide: IngredientsService,
+          useFactory: mockIngredientsService,
         },
       ],
     }).compile();
@@ -33,6 +42,7 @@ describe('IngredientStatesController', () => {
     ingredientStatesController = module.get<IngredientStatesController>(
       IngredientStatesController,
     );
+    ingredientsService = module.get<IngredientsService>(IngredientsService);
   });
 
   describe('createIngredientState', () => {
@@ -139,10 +149,17 @@ describe('IngredientStatesController', () => {
   describe('assignToIngredient', () => {
     it('should call ingredientStatesService.assignToIngredient()', async () => {
       const mockDto = 'some data';
+      const mockNewIngredientState = 'some measurement unit';
+      const mockIngredients = ['some ingredients'];
+      ingredientStatesService.getIngredientStateById = jest
+        .fn()
+        .mockResolvedValue(mockNewIngredientState);
+      ingredientsService.getIngredients.mockResolvedValue(mockIngredients);
 
       await ingredientStatesController.assignToIngredient(mockDto);
       expect(ingredientStatesService.assignToIngredient).toHaveBeenCalledWith(
-        mockDto,
+        mockNewIngredientState,
+        mockIngredients,
       );
     });
   });

@@ -11,6 +11,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { IngredientsService } from '../ingredients.service';
 import { AssignIngredientTypeToIngredientDto } from './dto/assign-ingredient-type-to-ingredient.dto';
 import { CreateIngredientTypeDto } from './dto/create-ingredient-type.dto';
 import { UpdateIngredientTypeDto } from './dto/update-ingredient-type.dto';
@@ -19,7 +20,10 @@ import { IngredientTypesService } from './ingredient-types.service';
 
 @Controller('ingredient-types')
 export class IngredientTypesController {
-  constructor(private ingredientTypesService: IngredientTypesService) {}
+  constructor(
+    private ingredientTypesService: IngredientTypesService,
+    private ingredientsService: IngredientsService,
+  ) {}
 
   @Post('')
   @UsePipes(ValidationPipe)
@@ -74,8 +78,17 @@ export class IngredientTypesController {
     @Body(ValidationPipe)
     assignToIngredientDto: AssignIngredientTypeToIngredientDto,
   ): Promise<void> {
+    const { ingredientTypeId, ingredientIds } = assignToIngredientDto;
+    const newIngredientType = await this.ingredientTypesService.getIngredientTypeById(
+      ingredientTypeId,
+    );
+    const ingredients = await this.ingredientsService.getIngredients({
+      ids: ingredientIds,
+    });
+
     return this.ingredientTypesService.assignToIngredient(
-      assignToIngredientDto,
+      newIngredientType,
+      ingredients,
     );
   }
 }

@@ -175,36 +175,31 @@ describe('IngredientStatesService', () => {
   });
 
   describe('assignToIngredient', () => {
-    it("should update the new and old ingredient state's 'ingredients assigned' property", async () => {
-      const mockDto = {
-        ingredientStateId: 'some ingredient state id',
-        ingredientIds: ['ingredient id 1', 'ingredient id 2'],
-      };
+    it("should update the new and old ingredient type's 'ingredients assigned' property", async () => {
       const mockNewIngredientState = {
-        id: 'ingredient state id 1',
+        id: 'ingredient type id 1',
       };
       const save = jest.fn();
       const mockIngredients = [
         {
           ingredientState: {
-            id: 'ingredient state id 1',
+            id: 'ingredient type id 1',
           },
           save,
         },
         {
           ingredientState: {
-            id: 'ingredient state id 2',
+            id: 'ingredient type id 2',
           },
           save,
         },
       ];
-      ingredientStatesService.getIngredientStateById = jest
-        .fn()
-        .mockResolvedValue(mockNewIngredientState);
       ingredientStatesService.updateIngredientStateIngredientsAssigned = jest.fn();
-      ingredientRepository.getIngredients.mockResolvedValue(mockIngredients);
 
-      await ingredientStatesService.assignToIngredient(mockDto);
+      await ingredientStatesService.assignToIngredient(
+        mockNewIngredientState,
+        mockIngredients,
+      );
       expect(
         ingredientStatesService.updateIngredientStateIngredientsAssigned,
       ).toHaveBeenCalledTimes(2);

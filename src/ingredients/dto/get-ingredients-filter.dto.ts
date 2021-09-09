@@ -5,5 +5,5 @@ export class GetIngredientsFilterDto {
   @IsOptional()
   @IsArray()
   @ArrayNotEmpty()
-  ids: string[];
+  ids?: string[];
 }

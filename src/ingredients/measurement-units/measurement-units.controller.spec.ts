@@ -1,5 +1,6 @@
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { IngredientsService } from '../ingredients.service';
 import { MeasurementUnitsController } from './measurement-units.controller';
 import { MeasurementUnitsService } from './measurement-units.service';
 
@@ -11,10 +12,14 @@ const mockmeasurementUnitsService = () => ({
   updateMeasurementUnit: jest.fn(),
   assignToIngredient: jest.fn(),
 });
+const mockIngredientsService = () => ({
+  getIngredients: jest.fn(),
+});
 
 describe('measurementUnitsController', () => {
   let measurementUnitsController;
   let measurementUnitsService;
+  let ingredientsService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -23,6 +28,10 @@ describe('measurementUnitsController', () => {
         {
           provide: MeasurementUnitsService,
           useFactory: mockmeasurementUnitsService,
+        },
+        {
+          provide: IngredientsService,
+          useFactory: mockIngredientsService,
         },
       ],
     }).compile();
@@ -33,6 +42,7 @@ describe('measurementUnitsController', () => {
     measurementUnitsService = module.get<MeasurementUnitsService>(
       MeasurementUnitsService,
     );
+    ingredientsService = module.get<IngredientsService>(IngredientsService);
   });
 
   describe('createMeasurementUnit', () => {
@@ -162,10 +172,17 @@ describe('measurementUnitsController', () => {
   describe('assignToIngredient', () => {
     it('should call measurementUnitsService.assignToIngredient()', async () => {
       const mockDto = 'some data';
+      const mockNewMeasurementUnit = 'some measurement unit';
+      const mockIngredients = ['some ingredients'];
+      measurementUnitsService.getMeasurementUnitById = jest
+        .fn()
+        .mockResolvedValue(mockNewMeasurementUnit);
+      ingredientsService.getIngredients.mockResolvedValue(mockIngredients);
 
       await measurementUnitsController.assignToIngredient(mockDto);
       expect(measurementUnitsService.assignToIngredient).toHaveBeenCalledWith(
-        mockDto,
+        mockNewMeasurementUnit,
+        mockIngredients,
       );
     });
   });

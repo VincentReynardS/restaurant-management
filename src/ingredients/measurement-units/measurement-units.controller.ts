@@ -11,6 +11,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { IngredientsService } from '../ingredients.service';
 import { AssignMeasurementUnitToIngredientDto } from './dto/assign-measurement-unit-to-ingredient.dto';
 import { CreateMeasurementUnitDto } from './dto/create-measurement-unit.dto';
 import { UpdateMesurementUnitDto } from './dto/update-measurement-unit.dto';
@@ -19,7 +20,10 @@ import { MeasurementUnitsService } from './measurement-units.service';
 
 @Controller('measurements')
 export class MeasurementUnitsController {
-  constructor(private measurementUnitsService: MeasurementUnitsService) {}
+  constructor(
+    private measurementUnitsService: MeasurementUnitsService,
+    private ingredientsService: IngredientsService,
+  ) {}
 
   @Post('')
   @UsePipes(ValidationPipe)
@@ -72,8 +76,17 @@ export class MeasurementUnitsController {
     @Body(ValidationPipe)
     assignToIngredientDto: AssignMeasurementUnitToIngredientDto,
   ): Promise<void> {
+    const { measurementUnitId, ingredientIds } = assignToIngredientDto;
+    const newMeasurementUnit = await this.measurementUnitsService.getMeasurementUnitById(
+      measurementUnitId,
+    );
+    const ingredients = await this.ingredientsService.getIngredients({
+      ids: ingredientIds,
+    });
+
     return this.measurementUnitsService.assignToIngredient(
-      assignToIngredientDto,
+      newMeasurementUnit,
+      ingredients,
     );
   }
 }
