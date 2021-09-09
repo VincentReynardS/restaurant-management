@@ -168,22 +168,15 @@ describe('IngredientTypesService', () => {
 
   describe('updateIngredientTypeIngredientsAssigned', () => {
     it('should add value to ingredientsAssigned', async () => {
-      const mockId = 'some id';
       const save = jest.fn();
       const mockIngredientType = {
         ingredientsAssigned: 0,
         save,
       };
-      ingredientTypesService.getIngredientTypeById = jest
-        .fn()
-        .mockResolvedValue(mockIngredientType);
 
       const result = await ingredientTypesService.updateIngredientTypeIngredientsAssigned(
-        mockId,
+        mockIngredientType,
         1,
-      );
-      expect(ingredientTypesService.getIngredientTypeById).toHaveBeenCalledWith(
-        mockId,
       );
       expect(save).toHaveBeenCalled();
       expect(result.ingredientsAssigned).toBe(1);

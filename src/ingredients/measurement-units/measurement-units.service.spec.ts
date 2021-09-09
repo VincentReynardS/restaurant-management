@@ -152,23 +152,16 @@ describe('MeasurementUnitsService', () => {
 
   describe('updateMeasurementUnitIngredientsAssigned', () => {
     it('should add value to ingredientsAssgined', async () => {
-      const mockId = 'some id';
       const save = jest.fn();
       const mockMeasurementUnit = {
         ingredientsAssigned: 0,
         save,
       };
-      measurementUnitsService.getMeasurementUnitById = jest
-        .fn()
-        .mockResolvedValue(mockMeasurementUnit);
 
       const result = await measurementUnitsService.updateMeasurementUnitIngredientsAssigned(
-        mockId,
+        mockMeasurementUnit,
         1,
       );
-      expect(
-        measurementUnitsService.getMeasurementUnitById,
-      ).toHaveBeenCalledWith(mockId);
       expect(save).toHaveBeenCalled();
       expect(result.ingredientsAssigned).toBe(1);
     });

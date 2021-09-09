@@ -62,11 +62,9 @@ export class IngredientTypesService {
   }
 
   async updateIngredientTypeIngredientsAssigned(
-    id: string,
+    ingredientType: IngredientType,
     valueAdded: number,
   ): Promise<IngredientType> {
-    const ingredientType = await this.getIngredientTypeById(id);
-
     ingredientType.ingredientsAssigned += valueAdded;
 
     try {
@@ -83,13 +81,13 @@ export class IngredientTypesService {
     ingredients: Ingredient[],
   ): Promise<void> {
     for (const ingredient of ingredients) {
-      const oldIngredientTypeId = ingredient.ingredientType.id;
-      const newIngredientTypeId = ingredientType.id;
+      const oldIngredientType = ingredient.ingredientType;
+      const newIngredientType = ingredientType;
 
-      if (oldIngredientTypeId !== newIngredientTypeId) {
+      if (oldIngredientType.id !== newIngredientType.id) {
         await Promise.all([
-          this.updateIngredientTypeIngredientsAssigned(oldIngredientTypeId, -1),
-          this.updateIngredientTypeIngredientsAssigned(newIngredientTypeId, 1),
+          this.updateIngredientTypeIngredientsAssigned(oldIngredientType, -1),
+          this.updateIngredientTypeIngredientsAssigned(newIngredientType, 1),
         ]);
 
         ingredient.ingredientType = ingredientType;

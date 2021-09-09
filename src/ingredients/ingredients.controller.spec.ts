@@ -14,12 +14,18 @@ const mockIngredientsService = () => ({
 });
 const mockMeasurementUnitsService = () => ({
   updateMeasurementUnitIngredientsAssigned: jest.fn(),
+  getMeasurementUnitById: jest.fn(),
+  assignToIngredient: jest.fn(),
 });
 const mockIngredientStatesService = () => ({
   updateIngredientStateIngredientsAssigned: jest.fn(),
+  getIngredientStateById: jest.fn(),
+  assignToIngredient: jest.fn(),
 });
 const mockIngredientTypesService = () => ({
   updateIngredientTypeIngredientsAssigned: jest.fn(),
+  getIngredientTypeById: jest.fn(),
+  assignToIngredient: jest.fn(),
 });
 
 describe('IngredientsController', () => {
@@ -72,31 +78,40 @@ describe('IngredientsController', () => {
         ingredientStateId: 'some ingredient state id',
         ingredientTypeId: 'some ingredient type id',
       };
-      const mockUpdatedMeasurementUnit = 'some measurement unit';
-      const mockUpdatedIngredientState = 'some ingredient state';
-      const mockUpdatedIngredientType = 'some ingredient type';
+      const mockMeasurementUnit = 'some measurement unit';
+      const mockIngredientState = 'some ingredient state';
+      const mockIngredientType = 'some ingredient type';
       const mockResult = 'some ingredient';
-      measurementUnitsService.updateMeasurementUnitIngredientsAssigned.mockResolvedValue(
-        mockUpdatedMeasurementUnit,
+      measurementUnitsService.getMeasurementUnitById.mockResolvedValue(
+        mockMeasurementUnit,
       );
-      ingredientStatesService.updateIngredientStateIngredientsAssigned.mockResolvedValue(
-        mockUpdatedIngredientState,
+      ingredientStatesService.getIngredientStateById.mockResolvedValue(
+        mockIngredientState,
       );
-      ingredientTypesService.updateIngredientTypeIngredientsAssigned.mockResolvedValue(
-        mockUpdatedIngredientType,
+      ingredientTypesService.getIngredientTypeById.mockResolvedValue(
+        mockIngredientType,
       );
       ingredientsService.createIngredient.mockResolvedValue(mockResult);
 
       const result = await ingredientsController.createIngredient(mockDto);
       expect(
+        measurementUnitsService.getMeasurementUnitById,
+      ).toHaveBeenCalledWith(mockDto.measurementUnitId);
+      expect(
+        ingredientStatesService.getIngredientStateById,
+      ).toHaveBeenCalledWith(mockDto.ingredientStateId);
+      expect(ingredientTypesService.getIngredientTypeById).toHaveBeenCalledWith(
+        mockDto.ingredientTypeId,
+      );
+      expect(
         measurementUnitsService.updateMeasurementUnitIngredientsAssigned,
-      ).toHaveBeenCalledWith(mockDto.measurementUnitId, 1);
+      ).toHaveBeenCalledWith(mockMeasurementUnit, 1);
       expect(
         ingredientStatesService.updateIngredientStateIngredientsAssigned,
-      ).toHaveBeenCalledWith(mockDto.ingredientStateId, 1);
+      ).toHaveBeenCalledWith(mockIngredientState, 1);
       expect(
         ingredientTypesService.updateIngredientTypeIngredientsAssigned,
-      ).toHaveBeenCalledWith(mockDto.ingredientTypeId, 1);
+      ).toHaveBeenCalledWith(mockIngredientType, 1);
       expect(result).toBe(mockResult);
     });
   });
@@ -135,13 +150,13 @@ describe('IngredientsController', () => {
       expect(ingredientsService.getIngredientById).toHaveBeenCalledWith(mockId);
       expect(
         measurementUnitsService.updateMeasurementUnitIngredientsAssigned,
-      ).toHaveBeenCalledWith(mockMeasurementUnit.id, -1);
+      ).toHaveBeenCalledWith(mockMeasurementUnit, -1);
       expect(
         ingredientStatesService.updateIngredientStateIngredientsAssigned,
-      ).toHaveBeenCalledWith(mockIngredientState.id, -1);
+      ).toHaveBeenCalledWith(mockIngredientState, -1);
       expect(
         ingredientTypesService.updateIngredientTypeIngredientsAssigned,
-      ).toHaveBeenCalledWith(mockIngredientType.id, -1);
+      ).toHaveBeenCalledWith(mockIngredientType, -1);
     });
 
     it("should not decrement the associated resources' 'ingredients assigned' property value if ingredient is not found", async () => {
@@ -162,6 +177,49 @@ describe('IngredientsController', () => {
       expect(
         ingredientTypesService.updateIngredientTypeIngredientsAssigned,
       ).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('updateIngredient', () => {
+    it('should assign the new measurement unit, ingredient state, ingredient type to the ingredient', async () => {
+      const mockIngredientId = 'some ingredient id';
+      const mockDto = {
+        name: 'some new ingredient name',
+        measurementUnitId: 'some measurement unit id',
+        ingredientStateId: 'some ingredient state id',
+        ingredientTypeId: 'some ingredient type id',
+      };
+      const mockMeasurementUnit = 'some measuremenet unit';
+      const mockIngredientState = 'some ingredient state';
+      const mockIngredientType = 'some ingredient type';
+      const mockIngredient = {
+        name: 'some ingredient name',
+      };
+      measurementUnitsService.getMeasurementUnitById.mockResolvedValue(
+        mockMeasurementUnit,
+      );
+      ingredientStatesService.getIngredientStateById.mockResolvedValue(
+        mockIngredientState,
+      );
+      ingredientTypesService.getIngredientTypeById.mockResolvedValue(
+        mockIngredientType,
+      );
+      ingredientsService.getIngredientById.mockResolvedValue(mockIngredient);
+
+      const result = await ingredientsController.updateIngredient(
+        mockIngredientId,
+        mockDto,
+      );
+      expect(
+        measurementUnitsService.assignToIngredient,
+      ).toHaveBeenCalledWith(mockMeasurementUnit, [mockIngredient]);
+      expect(
+        ingredientStatesService.assignToIngredient,
+      ).toHaveBeenCalledWith(mockIngredientState, [mockIngredient]);
+      expect(
+        ingredientTypesService.assignToIngredient,
+      ).toHaveBeenCalledWith(mockIngredientType, [mockIngredient]);
+      expect(result.name).toBe(mockDto.name);
     });
   });
 });

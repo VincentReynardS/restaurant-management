@@ -62,11 +62,9 @@ export class IngredientStatesService {
   }
 
   async updateIngredientStateIngredientsAssigned(
-    id: string,
+    ingredientState: IngredientState,
     valueAdded: number,
   ): Promise<IngredientState> {
-    const ingredientState = await this.getIngredientStateById(id);
-
     ingredientState.ingredientsAssigned += valueAdded;
 
     try {
@@ -83,19 +81,13 @@ export class IngredientStatesService {
     ingredients: Ingredient[],
   ): Promise<void> {
     for (const ingredient of ingredients) {
-      const oldIngredientStateId = ingredient.ingredientState.id;
-      const newIngredientStateId = ingredientState.id;
+      const oldIngredientState = ingredient.ingredientState;
+      const newIngredientState = ingredientState;
 
-      if (oldIngredientStateId !== newIngredientStateId) {
+      if (oldIngredientState.id !== newIngredientState.id) {
         await Promise.all([
-          this.updateIngredientStateIngredientsAssigned(
-            oldIngredientStateId,
-            -1,
-          ),
-          this.updateIngredientStateIngredientsAssigned(
-            newIngredientStateId,
-            1,
-          ),
+          this.updateIngredientStateIngredientsAssigned(oldIngredientState, -1),
+          this.updateIngredientStateIngredientsAssigned(newIngredientState, 1),
         ]);
 
         ingredient.ingredientState = ingredientState;

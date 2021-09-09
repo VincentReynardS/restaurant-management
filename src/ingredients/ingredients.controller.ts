@@ -4,12 +4,14 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Query,
   ValidationPipe,
 } from '@nestjs/common';
 import { CreateIngredientDto } from './dto/create-ingredient.dto';
 import { GetIngredientsFilterDto } from './dto/get-ingredients-filter.dto';
+import { UpdateIngredientDto } from './dto/update-ingredient.dto';
 import { IngredientStatesService } from './ingredient-states/ingredient-states.service';
 import { IngredientTypesService } from './ingredient-types/ingredient-types.service';
 import { Ingredient } from './ingredient.entity';
@@ -27,7 +29,7 @@ export class IngredientsController {
 
   @Post('')
   async createIngredient(
-    @Body() createIngredientDto: CreateIngredientDto,
+    @Body(ValidationPipe) createIngredientDto: CreateIngredientDto,
   ): Promise<Ingredient> {
     const {
       name,
@@ -35,22 +37,27 @@ export class IngredientsController {
       ingredientStateId,
       ingredientTypeId,
     } = createIngredientDto;
+    const measurementUnit = await this.measurementUnitsService.getMeasurementUnitById(
+      measurementUnitId,
+    );
+    const ingredientState = await this.ingredientStatesService.getIngredientStateById(
+      ingredientStateId,
+    );
+    const ingredientType = await this.ingredientTypesService.getIngredientTypeById(
+      ingredientTypeId,
+    );
 
-    const [
-      measurementUnit,
-      ingredientState,
-      ingredientType,
-    ] = await Promise.all([
+    await Promise.all([
       this.measurementUnitsService.updateMeasurementUnitIngredientsAssigned(
-        measurementUnitId,
+        measurementUnit,
         1,
       ),
       this.ingredientStatesService.updateIngredientStateIngredientsAssigned(
-        ingredientStateId,
+        ingredientState,
         1,
       ),
       this.ingredientTypesService.updateIngredientTypeIngredientsAssigned(
-        ingredientTypeId,
+        ingredientType,
         1,
       ),
     ]);
@@ -80,17 +87,55 @@ export class IngredientsController {
     await this.ingredientsService.deleteIngredientById(id);
     await Promise.all([
       this.measurementUnitsService.updateMeasurementUnitIngredientsAssigned(
-        measurementUnit.id,
+        measurementUnit,
         -1,
       ),
       this.ingredientStatesService.updateIngredientStateIngredientsAssigned(
-        ingredientState.id,
+        ingredientState,
         -1,
       ),
       this.ingredientTypesService.updateIngredientTypeIngredientsAssigned(
-        ingredientType.id,
+        ingredientType,
         -1,
       ),
     ]);
+  }
+
+  @Patch('/:id')
+  async updateIngredient(
+    @Param('id') ingredientId: string,
+    @Body(ValidationPipe) updateIngredientDto: UpdateIngredientDto,
+  ): Promise<Ingredient> {
+    const {
+      name,
+      measurementUnitId,
+      ingredientStateId,
+      ingredientTypeId,
+    } = updateIngredientDto;
+
+    const [
+      measurementUnit,
+      ingredientState,
+      ingredientType,
+      ingredient,
+    ] = await Promise.all([
+      this.measurementUnitsService.getMeasurementUnitById(measurementUnitId),
+      this.ingredientStatesService.getIngredientStateById(ingredientStateId),
+      this.ingredientTypesService.getIngredientTypeById(ingredientTypeId),
+      this.ingredientsService.getIngredientById(ingredientId),
+    ]);
+
+    ingredient.name = name;
+    await this.measurementUnitsService.assignToIngredient(measurementUnit, [
+      ingredient,
+    ]);
+    await this.ingredientStatesService.assignToIngredient(ingredientState, [
+      ingredient,
+    ]);
+    await this.ingredientTypesService.assignToIngredient(ingredientType, [
+      ingredient,
+    ]);
+
+    return ingredient;
   }
 }

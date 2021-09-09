@@ -152,23 +152,16 @@ describe('IngredientStatesService', () => {
 
   describe('updateIngredientStateIngredientsAssigned', () => {
     it('should add value to ingredientsAssigned', async () => {
-      const mockId = 'some id';
       const save = jest.fn();
       const mockIngredientState = {
         ingredientsAssigned: 0,
         save,
       };
-      ingredientStatesService.getIngredientStateById = jest
-        .fn()
-        .mockResolvedValue(mockIngredientState);
 
       const result = await ingredientStatesService.updateIngredientStateIngredientsAssigned(
-        mockId,
+        mockIngredientState,
         1,
       );
-      expect(
-        ingredientStatesService.getIngredientStateById,
-      ).toHaveBeenCalledWith(mockId);
       expect(save).toHaveBeenCalled();
       expect(result.ingredientsAssigned).toBe(1);
     });

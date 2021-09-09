@@ -62,11 +62,9 @@ export class MeasurementUnitsService {
   }
 
   async updateMeasurementUnitIngredientsAssigned(
-    id: string,
+    measurementUnit: MeasurementUnit,
     valueAdded: number,
   ): Promise<MeasurementUnit> {
-    const measurementUnit = await this.getMeasurementUnitById(id);
-
     measurementUnit.ingredientsAssigned += valueAdded;
 
     try {
@@ -83,19 +81,13 @@ export class MeasurementUnitsService {
     targetIngredients: Ingredient[],
   ): Promise<void> {
     for (const ingredient of targetIngredients) {
-      const oldMeasurementUnitId = ingredient.measurementUnit.id;
-      const newMeasurementUnitId = measurementUnit.id;
+      const oldMeasurementUnit = ingredient.measurementUnit;
+      const newMeasurementUnit = measurementUnit;
 
-      if (oldMeasurementUnitId !== newMeasurementUnitId) {
+      if (oldMeasurementUnit.id !== newMeasurementUnit.id) {
         await Promise.all([
-          this.updateMeasurementUnitIngredientsAssigned(
-            oldMeasurementUnitId,
-            -1,
-          ),
-          this.updateMeasurementUnitIngredientsAssigned(
-            newMeasurementUnitId,
-            1,
-          ),
+          this.updateMeasurementUnitIngredientsAssigned(oldMeasurementUnit, -1),
+          this.updateMeasurementUnitIngredientsAssigned(newMeasurementUnit, 1),
         ]);
 
         ingredient.measurementUnit = measurementUnit;
