@@ -138,4 +138,16 @@ export class IngredientsController {
 
     return ingredient;
   }
+
+  // @Post('/:id/add-stock')
+  // async addIngredientStock(
+  //   @Param('id') id: string,
+  //   @Body('value') value: number,
+  // ): Promise<Ingredient> {
+  //   const ingredient = await this.ingredientsService.getIngredientById(id);
+  //   return this.ingredientsService.updateIngredientCurrentStock(
+  //     ingredient,
+  //     value,
+  //   );
+  // }
 }

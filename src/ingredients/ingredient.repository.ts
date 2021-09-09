@@ -87,4 +87,20 @@ export class IngredientRepository extends Repository<Ingredient> {
 
     return ingredient;
   }
+
+  async updateIngredientCurrentStock(
+    ingredient: Ingredient,
+    valueAdded: number,
+  ): Promise<Ingredient> {
+    ingredient.currentStock += valueAdded;
+
+    try {
+      await ingredient.save();
+    } catch (error) {
+      console.log(error.stack);
+      throw new InternalServerErrorException();
+    }
+
+    return ingredient;
+  }
 }

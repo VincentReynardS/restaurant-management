@@ -58,4 +58,14 @@ export class IngredientsService {
       throw new NotFoundException(`Ingredient with id '${id}' not found`);
     }
   }
+
+  async updateIngredientCurrentStock(
+    ingredient: Ingredient,
+    valueAdded: number,
+  ): Promise<Ingredient> {
+    return this.ingredientRepository.updateIngredientCurrentStock(
+      ingredient,
+      valueAdded,
+    );
+  }
 }

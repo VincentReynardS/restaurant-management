@@ -8,6 +8,7 @@ const mockIngredientRepository = () => ({
   findOne: jest.fn(),
   getIngredients: jest.fn(),
   delete: jest.fn(),
+  updateIngredientCurrentStock: jest.fn(),
 });
 
 describe('IngredientsService', () => {
@@ -116,6 +117,25 @@ describe('IngredientsService', () => {
         ingredientsService.deleteIngredientById(mockId),
       ).rejects.toThrow(NotFoundException);
       expect(ingredientRepository.delete).toHaveBeenCalledWith(mockId);
+    });
+  });
+
+  describe('updateIngredientCurrentStock', () => {
+    it('should return the updated ingredient', async () => {
+      const mockIngredient = 'some ingredient';
+      const mockValueAdded = 1;
+      ingredientRepository.updateIngredientCurrentStock.mockResolvedValue(
+        mockIngredient,
+      );
+
+      const result = await ingredientsService.updateIngredientCurrentStock(
+        mockIngredient,
+        mockValueAdded,
+      );
+      expect(
+        ingredientRepository.updateIngredientCurrentStock,
+      ).toHaveBeenCalledWith(mockIngredient, mockValueAdded);
+      expect(result).toBe(mockIngredient);
     });
   });
 });
