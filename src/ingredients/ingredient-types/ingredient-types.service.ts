@@ -4,6 +4,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { IngredientRepository } from '../ingredient.repository';
+import { AssignIngredientTypeToIngredientDto } from './dto/assign-ingredient-type-to-ingredient.dto';
 import { CreateIngredientTypeDto } from './dto/create-ingredient-type.dto';
 import { UpdateIngredientTypeDto } from './dto/update-ingredient-type.dto';
 import { IngredientType } from './ingredient-type.entity';
@@ -14,6 +16,8 @@ export class IngredientTypesService {
   constructor(
     @InjectRepository(IngredientTypeRepository)
     private ingredientTypeRepository: IngredientTypeRepository,
+    @InjectRepository(IngredientRepository)
+    private ingredientRepository: IngredientRepository,
   ) {}
 
   async createIngredientType(
@@ -71,5 +75,38 @@ export class IngredientTypesService {
     }
 
     return ingredientType;
+  }
+
+  async assignToIngredient(
+    assignToIngredientDto: AssignIngredientTypeToIngredientDto,
+  ): Promise<void> {
+    const { ingredientTypeId, ingredientIds } = assignToIngredientDto;
+    const newIngredientType = await this.getIngredientTypeById(
+      ingredientTypeId,
+    );
+    const ingredients = await this.ingredientRepository.getIngredients({
+      ids: ingredientIds,
+    });
+
+    for (const ingredient of ingredients) {
+      const oldIngredientTypeId = ingredient.ingredientType.id;
+      const newIngredientTypeId = newIngredientType.id;
+
+      if (oldIngredientTypeId !== newIngredientTypeId) {
+        await Promise.all([
+          this.updateIngredientTypeIngredientsAssigned(oldIngredientTypeId, -1),
+          this.updateIngredientTypeIngredientsAssigned(ingredientTypeId, 1),
+        ]);
+
+        ingredient.ingredientType = newIngredientType;
+
+        try {
+          ingredient.save();
+        } catch (error) {
+          console.log(error.stack);
+          throw new InternalServerErrorException();
+        }
+      }
+    }
   }
 }

@@ -71,7 +71,8 @@ export class IngredientStatesController {
 
   @Post('/assign-to-ingredient')
   async assignToIngredient(
-    @Body() assignToIngredientDto: AssignIngredientStateToIngredientDto,
+    @Body(ValidationPipe)
+    assignToIngredientDto: AssignIngredientStateToIngredientDto,
   ): Promise<void> {
     return this.ingredientStatesService.assignToIngredient(
       assignToIngredientDto,

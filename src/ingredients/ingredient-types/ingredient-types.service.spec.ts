@@ -1,5 +1,6 @@
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { IngredientRepository } from '../ingredient.repository';
 import { IngredientTypeRepository } from './ingredient-type.repository';
 import { IngredientTypesService } from './ingredient-types.service';
 
@@ -11,9 +12,14 @@ const mockIngredientTypeRepository = () => ({
   updateIngredientType: jest.fn(),
 });
 
+const mockIngredientRepository = () => ({
+  getIngredients: jest.fn(),
+});
+
 describe('IngredientTypesService', () => {
   let ingredientTypeRepository;
   let ingredientTypesService;
+  let ingredientRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -23,6 +29,10 @@ describe('IngredientTypesService', () => {
           provide: IngredientTypeRepository,
           useFactory: mockIngredientTypeRepository,
         },
+        {
+          provide: IngredientRepository,
+          useFactory: mockIngredientRepository,
+        },
       ],
     }).compile();
 
@@ -31,6 +41,9 @@ describe('IngredientTypesService', () => {
     );
     ingredientTypesService = module.get<IngredientTypesService>(
       IngredientTypesService,
+    );
+    ingredientRepository = module.get<IngredientRepository>(
+      IngredientRepository,
     );
   });
 
@@ -174,6 +187,47 @@ describe('IngredientTypesService', () => {
       );
       expect(save).toHaveBeenCalled();
       expect(result.ingredientsAssigned).toBe(1);
+    });
+  });
+
+  describe('assignToIngredient', () => {
+    it("should update the new and old ingredient type's 'ingredients assigned' property", async () => {
+      const mockDto = {
+        ingredientTypeId: 'some ingredient type id',
+        ingredientIds: ['ingredient id 1', 'ingredient id 2'],
+      };
+      const mockNewIngredientType = {
+        id: 'ingredient type id 1',
+      };
+      const save = jest.fn();
+      const mockIngredients = [
+        {
+          ingredientType: {
+            id: 'ingredient type id 1',
+          },
+          save,
+        },
+        {
+          ingredientType: {
+            id: 'ingredient type id 2',
+          },
+          save,
+        },
+      ];
+      ingredientTypesService.getIngredientTypeById = jest
+        .fn()
+        .mockResolvedValue(mockNewIngredientType);
+      ingredientTypesService.updateIngredientTypeIngredientsAssigned = jest.fn();
+      ingredientRepository.getIngredients.mockResolvedValue(mockIngredients);
+
+      await ingredientTypesService.assignToIngredient(mockDto);
+      expect(
+        ingredientTypesService.updateIngredientTypeIngredientsAssigned,
+      ).toHaveBeenCalledTimes(2);
+      expect(mockIngredients[1].ingredientType.id).toEqual(
+        mockNewIngredientType.id,
+      );
+      expect(save).toHaveBeenCalledTimes(1);
     });
   });
 });

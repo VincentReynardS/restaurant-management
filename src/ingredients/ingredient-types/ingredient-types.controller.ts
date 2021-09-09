@@ -11,6 +11,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { AssignIngredientTypeToIngredientDto } from './dto/assign-ingredient-type-to-ingredient.dto';
 import { CreateIngredientTypeDto } from './dto/create-ingredient-type.dto';
 import { UpdateIngredientTypeDto } from './dto/update-ingredient-type.dto';
 import { IngredientType } from './ingredient-type.entity';
@@ -65,6 +66,16 @@ export class IngredientTypesController {
     return this.ingredientTypesService.updateIngredientType(
       id,
       updateIngredientTypeDto,
+    );
+  }
+
+  @Post('/assign-to-ingredient')
+  async assignToIngredient(
+    @Body(ValidationPipe)
+    assignToIngredientDto: AssignIngredientTypeToIngredientDto,
+  ): Promise<void> {
+    return this.ingredientTypesService.assignToIngredient(
+      assignToIngredientDto,
     );
   }
 }
