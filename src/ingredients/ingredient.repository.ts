@@ -88,11 +88,20 @@ export class IngredientRepository extends Repository<Ingredient> {
     return ingredient;
   }
 
+  /**
+   * IMPORTANT: The value that is going to be added to the ingredient's current stock
+   * will be rounded to the correct precision (e.g the decimal places) according to the
+   * measurement unit used by the ingredient.
+   */
   async updateIngredientCurrentStock(
     ingredient: Ingredient,
     valueAdded: number,
   ): Promise<Ingredient> {
-    ingredient.currentStock += valueAdded;
+    const roundedValueAdded = +valueAdded.toFixed(
+      ingredient.measurementUnit.precision,
+    );
+
+    ingredient.currentStock += roundedValueAdded;
 
     try {
       await ingredient.save();

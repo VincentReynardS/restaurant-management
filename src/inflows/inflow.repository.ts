@@ -13,15 +13,13 @@ export class InflowRepository extends Repository<Inflow> {
     createInflowDto: CreateInflowDto,
     ingredient: Ingredient,
   ): Promise<Inflow> {
-    const {
-      date,
-      reason,
-      price,
-      quantity,
-      additionalDetails,
-    } = createInflowDto;
+    let { date, reason, price, quantity, additionalDetails } = createInflowDto;
 
-    const inflow = new Inflow();
+    quantity = +createInflowDto.quantity.toFixed(
+      ingredient.measurementUnit.precision,
+    );
+
+    const inflow = this.create();
     inflow.date = date;
     inflow.reason = reason;
     inflow.price = price;
