@@ -44,7 +44,7 @@ export class Ingredient extends BaseEntity {
   @JoinColumn({ name: 'ingredient_type_id' })
   ingredientType: IngredientType;
 
-  @Column({ name: 'current_stock', default: 0 })
+  @Column({ type: 'real', name: 'current_stock', default: 0 })
   currentStock: number;
 
   @OneToMany(
