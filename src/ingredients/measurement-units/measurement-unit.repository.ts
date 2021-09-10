@@ -46,6 +46,16 @@ export class MeasurementUnitRepository extends Repository<MeasurementUnit> {
     }
   }
 
+  async getMeasurementUnitById(id: string): Promise<MeasurementUnit> {
+    const measurementUnit = await this.findOne(id);
+
+    if (!measurementUnit) {
+      throw new NotFoundException(`Measurement unit with id '${id}' not found`);
+    }
+
+    return measurementUnit;
+  }
+
   async updateMeasurementUnit(
     id: string,
     updateMeasurementUnitDto: UpdateMesurementUnitDto,

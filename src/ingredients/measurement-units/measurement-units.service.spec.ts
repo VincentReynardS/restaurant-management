@@ -8,6 +8,7 @@ const mockMeasurementUnitReposiory = () => ({
   createMeasurementUnit: jest.fn(),
   findOne: jest.fn(),
   getMeasurementUnits: jest.fn(),
+  getMeasurementUnitById: jest.fn(),
   delete: jest.fn(),
   updateMeasurementUnit: jest.fn(),
   assignMeasurementUnitToIngredient: jest.fn(),
@@ -64,25 +65,33 @@ describe('MeasurementUnitsService', () => {
 
   describe('getMeasurementUnitById', () => {
     it('should throw not found exception if measurement unit is not found', async () => {
-      const mockResult = undefined;
+      const mockResult = new NotFoundException();
       const mockId = 'some id';
-      measurementUnitRepository.findOne.mockResolvedValue(mockResult);
+      measurementUnitRepository.getMeasurementUnitById.mockRejectedValue(
+        mockResult,
+      );
 
       await expect(
         measurementUnitsService.getMeasurementUnitById(mockId),
       ).rejects.toThrow(NotFoundException);
-      expect(measurementUnitRepository.findOne).toHaveBeenCalledWith(mockId);
+      expect(
+        measurementUnitRepository.getMeasurementUnitById,
+      ).toHaveBeenCalledWith(mockId);
     });
 
     it('should return the measurement unit if found', async () => {
       const mockResult = 'some measurement unit';
       const mockId = 'some id';
-      measurementUnitRepository.findOne.mockResolvedValue(mockResult);
+      measurementUnitRepository.getMeasurementUnitById.mockResolvedValue(
+        mockResult,
+      );
 
       const result = await measurementUnitsService.getMeasurementUnitById(
         mockId,
       );
-      expect(measurementUnitRepository.findOne).toHaveBeenCalledWith(mockId);
+      expect(
+        measurementUnitRepository.getMeasurementUnitById,
+      ).toHaveBeenCalledWith(mockId);
       expect(result).toBe(mockResult);
     });
   });

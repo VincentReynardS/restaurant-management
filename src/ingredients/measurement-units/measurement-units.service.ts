@@ -30,13 +30,7 @@ export class MeasurementUnitsService {
   }
 
   async getMeasurementUnitById(id: string): Promise<MeasurementUnit> {
-    const measurementUnit = await this.measurementUnitRepository.findOne(id);
-
-    if (!measurementUnit) {
-      throw new NotFoundException(`Measurement unit with id '${id}' not found`);
-    }
-
-    return measurementUnit;
+    return this.measurementUnitRepository.getMeasurementUnitById(id);
   }
 
   async getMeasurementUnits(): Promise<MeasurementUnit[]> {
