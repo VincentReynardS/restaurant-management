@@ -1,9 +1,11 @@
+import { Inflow } from '../inflows/inflow.entity';
 import {
   BaseEntity,
   Column,
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { IngredientState } from './ingredient-states/ingredient-state.entity';
@@ -13,7 +15,7 @@ import { MeasurementUnit } from './measurement-units/measurement-unit.entity';
 @Entity({ name: 'ingredients' })
 export class Ingredient extends BaseEntity {
   @PrimaryGeneratedColumn('uuid', { name: 'ingredient_id' })
-  ingredientId: string;
+  id: string;
 
   @Column({ unique: true })
   name: string;
@@ -44,4 +46,10 @@ export class Ingredient extends BaseEntity {
 
   @Column({ name: 'current_stock', default: 0 })
   currentStock: number;
+
+  @OneToMany(
+    type => Inflow,
+    inflow => inflow.ingredient,
+  )
+  inflows: Inflow[];
 }

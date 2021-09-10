@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { IngredientsModule } from './ingredients/ingredients.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { join } from 'path';
+import { InflowsModule } from './inflows/inflows.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { join } from 'path';
       envFilePath: ['.env.development', '.env'],
       ignoreEnvFile: process.env.NODE_ENV === 'production' ? true : false,
     }),
+    InflowsModule,
   ],
 })
 export class AppModule {}

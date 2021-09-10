@@ -34,5 +34,6 @@ import { MeasurementUnitsService } from './measurement-units/measurement-units.s
     IngredientTypesService,
     IngredientsService,
   ],
+  exports: [IngredientsService],
 })
 export class IngredientsModule {}
