@@ -1,0 +1,2583 @@
+{
+	"info": {
+		"_postman_id": "679b7904-81a1-490d-a1b9-3b9a1d310872",
+		"name": "API",
+		"description": "# Introduction\nThis is an API for restaurant management APP, built as a take-home assignment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Measurement Units",
+			"item": [
+				{
+					"name": "Create measurement unit",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"liters\",\n    \"abbreviation\": \"l\",\n    \"precision\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/measurements",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"measurements"
+							]
+						},
+						"description": "Create a new measurement unit. Each measurement unit must have a unique name, creating a measurement unit with an existing name will result in failure (409 response)"
+					},
+					"response": [
+						{
+							"name": "Create measurement unit [FAIL: resource already exists]",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"gram\",\n    \"abbreviation\": \"g\",\n    \"precision\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/measurements",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"measurements"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "content-length",
+									"value": "88"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 10 Sep 2021 12:40:20 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 409,\n    \"message\": \"Measurement unit 'gram' already exists\",\n    \"error\": \"Conflict\"\n}"
+						},
+						{
+							"name": "Create measurement unit [OK]",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"liters\",\n    \"abbreviation\": \"l\",\n    \"precision\": 2\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/measurements",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"measurements"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "content-length",
+									"value": "118"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 10 Sep 2021 12:41:17 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"name\": \"liters\",\n    \"precision\": 2,\n    \"abbreviation\": \"l\",\n    \"id\": \"bf7cf6e1-c626-4a8b-baa1-5eec198b53b3\",\n    \"ingredientsAssigned\": 0\n}"
+						}
+					]
+				},
+				{
+					"name": "Get measurement units",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/measurements",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"measurements"
+							]
+						},
+						"description": "Get all available measurement units in database"
+					},
+					"response": [
+						{
+							"name": "Get measurement units [OK]",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/measurements",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"measurements"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "content-length",
+									"value": "364"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 10 Sep 2021 12:41:27 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": \"aa9eb1f1-0553-4a1b-b53c-488d3e179c59\",\n        \"name\": \"tablespoon\",\n        \"precision\": 1,\n        \"abbreviation\": \"tbpsn\",\n        \"ingredientsAssigned\": 1\n    },\n    {\n        \"id\": \"3db820db-e6d6-458f-972f-8aa957fd6d31\",\n        \"name\": \"gram\",\n        \"precision\": 2,\n        \"abbreviation\": \"g\",\n        \"ingredientsAssigned\": 1\n    },\n    {\n        \"id\": \"bf7cf6e1-c626-4a8b-baa1-5eec198b53b3\",\n        \"name\": \"liters\",\n        \"precision\": 2,\n        \"abbreviation\": \"l\",\n        \"ingredientsAssigned\": 0\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Delete measurement unit",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/measurements/b204262c-6c60-4f64-8630-827989ab3085",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"measurements",
+								"b204262c-6c60-4f64-8630-827989ab3085"
+							]
+						},
+						"description": "Delete a measurement unit. If the measurement unit is still being used by one or more ingredients, the operation will fail (409 response)"
+					},
+					"response": [
+						{
+							"name": "Delete measurement unit [FAIL: resource is still needed by other resource(s)]",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/measurements/aa9eb1f1-0553-4a1b-b53c-488d3e179c59",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"measurements",
+										"aa9eb1f1-0553-4a1b-b53c-488d3e179c59"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "content-length",
+									"value": "111"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 10 Sep 2021 12:42:19 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 409,\n    \"message\": \"There are 1 ingredients which still use this measurement unit\",\n    \"error\": \"Conflict\"\n}"
+						},
+						{
+							"name": "Delete measurement unit [OK]",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/measurements/bf7cf6e1-c626-4a8b-baa1-5eec198b53b3",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"measurements",
+										"bf7cf6e1-c626-4a8b-baa1-5eec198b53b3"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "content-length",
+									"value": "0"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 10 Sep 2021 12:41:49 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "Delete measurement unit [FAIL: resource not found]",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/measurements/bf7cf6e1-c626-4a8b-baa1-5eec198b53b3",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"measurements",
+										"bf7cf6e1-c626-4a8b-baa1-5eec198b53b3"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "content-length",
+									"value": "124"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 10 Sep 2021 12:41:57 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 404,\n    \"message\": \"Measurement unit with id 'bf7cf6e1-c626-4a8b-baa1-5eec198b53b3' not found\",\n    \"error\": \"Not Found\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update measurement unit",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"name\": \"gram\",\n        \"precision\": 2,\n        \"abbreviation\": \"g\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/measurements/aa9eb1f1-0553-4a1b-b53c-488d3e179c59",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"measurements",
+								"aa9eb1f1-0553-4a1b-b53c-488d3e179c59"
+							]
+						},
+						"description": "Updates a measurement unit's properties. Renaming the measurement unit's name to an existing name will result in failure (409 response)"
+					},
+					"response": [
+						{
+							"name": "Update measurement unit [FAIL: resource not found]",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n        \"name\": \"gram\",\n        \"precision\": 1,\n        \"abbreviation\": \"tbspn\"\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/measurements/bf7cf6e1-c626-4a8b-baa1-5eec198b53b3",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"measurements",
+										"bf7cf6e1-c626-4a8b-baa1-5eec198b53b3"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "content-length",
+									"value": "40"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 10 Sep 2021 12:45:46 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 404,\n    \"message\": \"Not Found\"\n}"
+						},
+						{
+							"name": "Update measurement unit [OK]",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n        \"name\": \"tablespoon\",\n        \"precision\": 1,\n        \"abbreviation\": \"tbspn\"\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/measurements/aa9eb1f1-0553-4a1b-b53c-488d3e179c59",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"measurements",
+										"aa9eb1f1-0553-4a1b-b53c-488d3e179c59"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "content-length",
+									"value": "126"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 10 Sep 2021 12:44:10 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"aa9eb1f1-0553-4a1b-b53c-488d3e179c59\",\n    \"name\": \"tablespoon\",\n    \"precision\": 1,\n    \"abbreviation\": \"tbspn\",\n    \"ingredientsAssigned\": 1\n}"
+						},
+						{
+							"name": "Update measurement unit [FAIL: already exists]",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n        \"name\": \"gram\",\n        \"precision\": 2,\n        \"abbreviation\": \"g\"\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/measurements/aa9eb1f1-0553-4a1b-b53c-488d3e179c59",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"measurements",
+										"aa9eb1f1-0553-4a1b-b53c-488d3e179c59"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "88"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"58-Nn4IUEe0ZhvA70YxFZQfnL7UJIY\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 06 Sep 2021 14:58:22 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 409,\n    \"message\": \"Measurement unit 'gram' already exists\",\n    \"error\": \"Conflict\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Assign measurement unit to ingredients",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"measurementUnitId\": \"aa9eb1f1-0553-4a1b-b53c-488d3e179c59\",\n    \"ingredientIds\": [\"f6ec52e2-6380-4950-9faf-bcb119b8a08b\",\"6628c3e3-ac6e-4154-8cfd-ac5cebe1249f\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/measurements/assign-to-ingredient",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"measurements",
+								"assign-to-ingredient"
+							]
+						},
+						"description": "Assign a measurement unit to one or more ingredients."
+					},
+					"response": [
+						{
+							"name": "Assign measurement unit to ingredient [OK]",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"measurementUnitId\": \"3db820db-e6d6-458f-972f-8aa957fd6d31\",\n    \"ingredientIds\": [\"f6ec52e2-6380-4950-9faf-bcb119b8a08b\"]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/measurements/assign-to-ingredient",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"measurements",
+										"assign-to-ingredient"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 08 Sep 2021 13:09:29 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Ingredient Types",
+			"item": [
+				{
+					"name": "Create ingredient types",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"solid\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/ingredient-types",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"ingredient-types"
+							]
+						},
+						"description": "Create a new ingredient type. Each ingredient type must have a unique name, creating an ingredient type with an existing name will result in failure (409 response)"
+					},
+					"response": [
+						{
+							"name": "Create ingredient types [FAIL: already exists]",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"solid\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/ingredient-types",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"ingredient-types"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "86"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"56-07lJic6fUIajaxlQXMI+l7AbozI\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 06 Sep 2021 14:33:26 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 409,\n    \"message\": \"Ingredient type solid already exists\",\n    \"error\": \"Conflict\"\n}"
+						},
+						{
+							"name": "Create ingredient types [OK]",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"solid\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/ingredient-types",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"ingredient-types"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "98"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"62-KsMXhi4rb3Z11j2hjJw/2uHjDAk\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 06 Sep 2021 14:31:06 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"name\": \"solid\",\n    \"ingredientTypeId\": \"56fc9005-ff77-4392-b68d-27364d41f934\",\n    \"ingredientsAssigned\": 0\n}"
+						},
+						{
+							"name": "Create ingredient types [OK]",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"liquid\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/ingredient-types",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"ingredient-types"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "99"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"63-7vOTyvN4uImSlLWGFDeslbry+eg\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 06 Sep 2021 15:10:41 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"name\": \"liquid\",\n    \"ingredientTypeId\": \"beecfe8b-a530-465c-8b33-792322aa7b5d\",\n    \"ingredientsAssigned\": 0\n}"
+						}
+					]
+				},
+				{
+					"name": "Get ingredient types",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/ingredient-types",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"ingredient-types"
+							]
+						},
+						"description": "Get all available ingredient types in database."
+					},
+					"response": [
+						{
+							"name": "Get ingredient types [OK]",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/ingredient-types",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"ingredient-types"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "100"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"64-PcP/I0BBpfSV6d107MrNb4QlD80\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 06 Sep 2021 14:30:52 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"ingredientTypeId\": \"4c845762-57d1-43ad-aadf-2d4db32e6193\",\n        \"name\": \"solid\",\n        \"ingredientsAssigned\": 0\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Delete ingredient type",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/ingredient-types/56fc9005-ff77-4392-b68d-27364d41f934",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"ingredient-types",
+								"56fc9005-ff77-4392-b68d-27364d41f934"
+							]
+						},
+						"description": "Deletea an ingredient type. If the ingredient type is still being used by one or more ingredients, the operation will fail (409 response)"
+					},
+					"response": [
+						{
+							"name": "Delete ingredient type [OK]",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/ingredient-types/56fc9005-ff77-4392-b68d-27364d41f934",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"ingredient-types",
+										"56fc9005-ff77-4392-b68d-27364d41f934"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 06 Sep 2021 14:32:47 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								}
+							],
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "Delete ingredient type [FAIL: ingredients assigned not zero]",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/ingredient-types/56fc9005-ff77-4392-b68d-27364d41f934",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"ingredient-types",
+										"56fc9005-ff77-4392-b68d-27364d41f934"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "110"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"6e-Hj69RsOZjTBPOulincSg2Cjbb+I\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 06 Sep 2021 14:31:30 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 409,\n    \"message\": \"There are 1 ingredients which still use this ingredient type\",\n    \"error\": \"Conflict\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update ingredient type",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"solid\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/ingredient-types/f26980de-f731-4616-b868-65297658fcff",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"ingredient-types",
+								"f26980de-f731-4616-b868-65297658fcff"
+							]
+						},
+						"description": "Update an ingredient type's properties. Renaming the ingredient type's name to an existing name will result in failure (409 response)"
+					},
+					"response": [
+						{
+							"name": "Update ingredient type [FAIL: already exists]",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"liquid\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/ingredient-types/f26980de-f731-4616-b868-65297658fcff",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"ingredient-types",
+										"f26980de-f731-4616-b868-65297658fcff"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "87"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"57-PRWPjJhwBFBhMOGaCyxz8XnNQ40\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 06 Sep 2021 15:11:48 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 409,\n    \"message\": \"Ingredient type liquid already exists\",\n    \"error\": \"Conflict\"\n}"
+						},
+						{
+							"name": "Update ingredient type [OK]",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"solid\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/ingredient-types/f26980de-f731-4616-b868-65297658fcff",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"ingredient-types",
+										"f26980de-f731-4616-b868-65297658fcff"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "98"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"62-oXjalq4eIMOGWEISvvG33ufZbF0\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 06 Sep 2021 15:12:27 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"ingredientTypeId\": \"f26980de-f731-4616-b868-65297658fcff\",\n    \"name\": \"solid\",\n    \"ingredientsAssigned\": 0\n}"
+						}
+					]
+				},
+				{
+					"name": "Assign ingredient type to ingredients",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ingredientTypeId\": \"f26980de-f731-4616-b868-65297658fcff\",\n    \"ingredientIds\": [\"6628c3e3-ac6e-4154-8cfd-ac5cebe1249f\",\"f6ec52e2-6380-4950-9faf-bcb119b8a08b\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/ingredient-types/assign-to-ingredient",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"ingredient-types",
+								"assign-to-ingredient"
+							]
+						},
+						"description": "Assign an ingredient type to one or more ingredients."
+					},
+					"response": [
+						{
+							"name": "Assign ingredient type to ingredients [OK]",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"ingredientTypeId\": \"beecfe8b-a530-465c-8b33-792322aa7b5d\",\n    \"ingredientIds\": [\"6628c3e3-ac6e-4154-8cfd-ac5cebe1249f\",\"f6ec52e2-6380-4950-9faf-bcb119b8a08b\"]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/ingredient-types/assign-to-ingredient",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"ingredient-types",
+										"assign-to-ingredient"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 09 Sep 2021 04:03:30 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Ingredient States",
+			"item": [
+				{
+					"name": "Create ingredient state",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"raw\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/ingredient-states",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"ingredient-states"
+							]
+						},
+						"description": "Create a new ingredient state. Each ingredient state must have a unique name, creating a ingredient state with an existing name will result in failure (409 response)"
+					},
+					"response": [
+						{
+							"name": "Create ingredient state [OK]",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"raw\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/ingredient-states",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"ingredient-states"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "97"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"61-HlfHApZltN4wmHdf0kr3gd2jsFs\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 07 Sep 2021 05:06:49 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"name\": \"raw\",\n    \"ingredientStateId\": \"9db59931-de33-4472-a91d-8f052132f0b5\",\n    \"ingredientsAssigned\": 0\n}"
+						},
+						{
+							"name": "Create ingredient state [FAIL: already exists]",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"raw\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/ingredient-states",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"ingredient-states"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "87"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"57-kZJF46bSoH7yvIyOvbwvfPPd65M\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 07 Sep 2021 05:24:12 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 409,\n    \"message\": \"Ingredient state 'raw' already exists\",\n    \"error\": \"Conflict\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get ingredient states",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/ingredient-states",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"ingredient-states"
+							]
+						},
+						"description": "Get all available ingredient states in database."
+					},
+					"response": [
+						{
+							"name": "Get ingredient states [OK]",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/ingredient-states",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"ingredient-states"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "99"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"63-oaJTKiOc8CDVzePiVfcmc2lQJy4\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 07 Sep 2021 05:25:10 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"ingredientStateId\": \"9db59931-de33-4472-a91d-8f052132f0b5\",\n        \"name\": \"raw\",\n        \"ingredientsAssigned\": 0\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Delete ingredient state",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/ingredient-states/61c53a45-c7d6-48c1-8e35-160441188053",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"ingredient-states",
+								"61c53a45-c7d6-48c1-8e35-160441188053"
+							]
+						},
+						"description": "Delete an ingredient state. If the ingredient state is still being used by one or more ingredients, the operation will fail (409 response)"
+					},
+					"response": [
+						{
+							"name": "Delete ingredient state [FAIL: resource not found]",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/ingredient-states/ce528b88-1005-40d4-88e9-94bdb3a1faa7",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"ingredient-states",
+										"ce528b88-1005-40d4-88e9-94bdb3a1faa7"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "40"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"28-oR73Vb/YPfDbgDgtA//MdHJasVY\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 07 Sep 2021 05:51:06 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 404,\n    \"message\": \"Not Found\"\n}"
+						},
+						{
+							"name": "Delete ingredient state [OK]",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/ingredient-states/61c53a45-c7d6-48c1-8e35-160441188053",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"ingredient-states",
+										"61c53a45-c7d6-48c1-8e35-160441188053"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 07 Sep 2021 05:52:02 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "Update ingredient state",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"raw\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/ingredient-states/9db59931-de33-4472-a91d-8f052132f0b5",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"ingredient-states",
+								"9db59931-de33-4472-a91d-8f052132f0b5"
+							]
+						},
+						"description": "Update an ingredient state's properties."
+					},
+					"response": [
+						{
+							"name": "Update ingredient state [FAIL: already exists]",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"raw\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/ingredient-states/9db59931-de33-4472-a91d-8f052132f0b5",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"ingredient-states",
+										"9db59931-de33-4472-a91d-8f052132f0b5"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "87"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"57-kZJF46bSoH7yvIyOvbwvfPPd65M\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 07 Sep 2021 06:26:31 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 409,\n    \"message\": \"Ingredient state 'raw' already exists\",\n    \"error\": \"Conflict\"\n}"
+						},
+						{
+							"name": "Update ingredient state [OK]",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"raw\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/ingredient-states/9db59931-de33-4472-a91d-8f052132f0b5",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"ingredient-states",
+										"9db59931-de33-4472-a91d-8f052132f0b5"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "97"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"61-I/aa2ZKhpzOnQjSefK5cN6YiUfs\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 07 Sep 2021 06:27:18 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"ingredientStateId\": \"9db59931-de33-4472-a91d-8f052132f0b5\",\n    \"name\": \"raw\",\n    \"ingredientsAssigned\": 0\n}"
+						}
+					]
+				},
+				{
+					"name": "Assign ingredient state to ingredients",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ingredientStateId\": \"9db59931-de33-4472-a91d-8f052132f0b5\",\n    \"ingredientIds\": [\"6628c3e3-ac6e-4154-8cfd-ac5cebe1249f\",\"f6ec52e2-6380-4950-9faf-bcb119b8a08b\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/ingredient-states/assign-to-ingredient",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"ingredient-states",
+								"assign-to-ingredient"
+							]
+						},
+						"description": "Assign an ingredient state to one or more ingredients."
+					},
+					"response": [
+						{
+							"name": "Assign ingredient state to ingredients [OK]",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"ingredientStateId\": \"4030b4b7-9f25-4541-8cdc-a1301888df88\",\n    \"ingredientIds\": [\"6628c3e3-ac6e-4154-8cfd-ac5cebe1249f\",\"f6ec52e2-6380-4950-9faf-bcb119b8a08b\"]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/ingredient-states/assign-to-ingredient",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"ingredient-states",
+										"assign-to-ingredient"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 09 Sep 2021 03:46:21 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Ingredients",
+			"item": [
+				{
+					"name": "Create ingredient",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"test1\",\n    \"measurementUnitId\": \"3db820db-e6d6-458f-972f-8aa957fd6d31\",\n    \"ingredientStateId\": \"9db59931-de33-4472-a91d-8f052132f0b5\",\n    \"ingredientTypeId\": \"f26980de-f731-4616-b868-65297658fcff\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/ingredients",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"ingredients"
+							]
+						},
+						"description": "Create a new ingrdient. Each ingredient must have a unique name, creating an igredient with an existing name will result in failure (409 response)"
+					},
+					"response": [
+						{
+							"name": "Create ingredient [OK]",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"test1\",\n    \"measurementUnitId\": \"3db820db-e6d6-458f-972f-8aa957fd6d31\",\n    \"ingredientStateId\": \"9db59931-de33-4472-a91d-8f052132f0b5\",\n    \"ingredientTypeId\": \"f26980de-f731-4616-b868-65297658fcff\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/ingredients",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"ingredients"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "454"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1c6-DEnukEB5xebjlaTq4spzPXDTB7I\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 07 Sep 2021 12:41:00 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"name\": \"test1\",\n    \"measurementUnit\": {\n        \"id\": \"3db820db-e6d6-458f-972f-8aa957fd6d31\",\n        \"name\": \"gram\",\n        \"precision\": 2,\n        \"abbreviation\": \"g\",\n        \"ingredientsAssigned\": 0\n    },\n    \"ingredientState\": {\n        \"ingredientStateId\": \"9db59931-de33-4472-a91d-8f052132f0b5\",\n        \"name\": \"raw\",\n        \"ingredientsAssigned\": 0\n    },\n    \"ingredientType\": {\n        \"ingredientTypeId\": \"f26980de-f731-4616-b868-65297658fcff\",\n        \"name\": \"solid\",\n        \"ingredientsAssigned\": 0\n    },\n    \"ingredientId\": \"ae0a8dc0-5080-4ec0-8551-f88a580a62fe\",\n    \"currentStock\": 0\n}"
+						},
+						{
+							"name": "Create ingredient [FAIL: one of the resources is not found]",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"test1\",\n    \"measurementUnitId\": \"3db820db-e6d6-458f-972f-8aa957fd6d31\",\n    \"ingredientStateId\": \"9db59931-de33-4472-a91d-8f052132f0b5\",\n    \"ingredientTypeId\": \"56fc9005-ff77-4392-b68d-27364d41f934\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/ingredients",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"ingredients"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "123"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"7b-ju3K6TLeM+i2hRBMOC4+1iPW+tc\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 07 Sep 2021 09:34:49 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 404,\n    \"message\": \"Ingredient type with id '56fc9005-ff77-4392-b68d-27364d41f934' not found\",\n    \"error\": \"Not Found\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get ingredients",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/ingredients",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"ingredients"
+							]
+						},
+						"description": "Get all available ingredients in database."
+					},
+					"response": [
+						{
+							"name": "Get ingredients [OK]",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/ingredients",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"ingredients"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "456"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1c8-O6tzCD3HgNejjZZmAaiS4EMWWuM\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 08 Sep 2021 05:45:15 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"ingredientId\": \"684770de-471f-4967-867a-9e2647767cdd\",\n        \"name\": \"test1\",\n        \"currentStock\": 0,\n        \"measurementUnit\": {\n            \"id\": \"3db820db-e6d6-458f-972f-8aa957fd6d31\",\n            \"name\": \"gram\",\n            \"precision\": 2,\n            \"abbreviation\": \"g\",\n            \"ingredientsAssigned\": 1\n        },\n        \"ingredientState\": {\n            \"ingredientStateId\": \"9db59931-de33-4472-a91d-8f052132f0b5\",\n            \"name\": \"raw\",\n            \"ingredientsAssigned\": 1\n        },\n        \"ingredientType\": {\n            \"ingredientTypeId\": \"f26980de-f731-4616-b868-65297658fcff\",\n            \"name\": \"solid\",\n            \"ingredientsAssigned\": 1\n        }\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Delete ingredient",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/ingredients/6628c3e3-ac6e-4154-8cfd-ac5cebe1249f",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"ingredients",
+								"6628c3e3-ac6e-4154-8cfd-ac5cebe1249f"
+							]
+						},
+						"description": "Delete an ingredient. Be careful when deleting an ingredient as it will also delete every infow entries related to that ingredient."
+					},
+					"response": [
+						{
+							"name": "Delete ingredient [OK]",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/ingredients/684770de-471f-4967-867a-9e2647767cdd",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"ingredients",
+										"684770de-471f-4967-867a-9e2647767cdd"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 08 Sep 2021 07:58:55 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								}
+							],
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "Delete ingredient [FAIL: resource not found]",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/ingredients/684770de-471f-4967-867a-9e2647767cdd",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"ingredients",
+										"684770de-471f-4967-867a-9e2647767cdd"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "118"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"76-WTYZ+t3NOiE8B4QtRLIJtsksLgQ\""
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 08 Sep 2021 08:00:54 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 404,\n    \"message\": \"Ingredient with id '684770de-471f-4967-867a-9e2647767cdd' not found\",\n    \"error\": \"Not Found\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update ingredient",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"test new\",\n    \"measurementUnitId\": \"aa9eb1f1-0553-4a1b-b53c-488d3e179c59\",\n    \"ingredientStateId\": \"9db59931-de33-4472-a91d-8f052132f0b5\",\n    \"ingredientTypeId\": \"f26980de-f731-4616-b868-65297658fcff\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/ingredients/6628c3e3-ac6e-4154-8cfd-ac5cebe1249f",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"ingredients",
+								"6628c3e3-ac6e-4154-8cfd-ac5cebe1249f"
+							]
+						},
+						"description": "Update an ingredient's properties."
+					},
+					"response": [
+						{
+							"name": "Update ingredient [OK]",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"test new\",\n    \"measurementUnitId\": \"aa9eb1f1-0553-4a1b-b53c-488d3e179c59\",\n    \"ingredientStateId\": \"9db59931-de33-4472-a91d-8f052132f0b5\",\n    \"ingredientTypeId\": \"f26980de-f731-4616-b868-65297658fcff\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/ingredients/6628c3e3-ac6e-4154-8cfd-ac5cebe1249f",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"ingredients",
+										"6628c3e3-ac6e-4154-8cfd-ac5cebe1249f"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "438"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1b6-GTmTK1ngKiwLOMruJliM0oh2700\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 09 Sep 2021 08:26:56 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"ingredientId\": \"6628c3e3-ac6e-4154-8cfd-ac5cebe1249f\",\n    \"name\": \"test new\",\n    \"currentStock\": 0,\n    \"measurementUnit\": {\n        \"id\": \"aa9eb1f1-0553-4a1b-b53c-488d3e179c59\",\n        \"name\": \"tablespoon\",\n        \"precision\": 1,\n        \"abbreviation\": \"tbpsn\",\n        \"ingredientsAssigned\": 2\n    },\n    \"ingredientState\": {\n        \"id\": \"9db59931-de33-4472-a91d-8f052132f0b5\",\n        \"name\": \"raw\",\n        \"ingredientsAssigned\": 2\n    },\n    \"ingredientType\": {\n        \"id\": \"f26980de-f731-4616-b868-65297658fcff\",\n        \"name\": \"solid\",\n        \"ingredientsAssigned\": 2\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Inflows",
+			"item": [
+				{
+					"name": "Create inflow entry",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ingredientId\": \"6628c3e3-ac6e-4154-8cfd-ac5cebe1249f\",\n    \"date\": \"2021-09-10\",\n    \"reason\": \"PURCHASE\",\n    \"price\": 1000,\n    \"quantity\": 1,\n    \"additionalDetails\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/inflows",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"inflows"
+							]
+						},
+						"description": "Create a new inflow entry. The quantity will be rounded to the correct precision (e.g the decimal places) according to the measurement unit used by the related ingredient. The current stock of the related ingredient will be added by the rounded quantity."
+					},
+					"response": [
+						{
+							"name": "Create inflow entry [OK]",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"ingredientId\": \"6628c3e3-ac6e-4154-8cfd-ac5cebe1249f\",\n    \"date\": \"2021-09-10\",\n    \"reason\": \"PURCHASE\",\n    \"price\": 1000,\n    \"quantity\": 1,\n    \"additionalDetails\": \"\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/inflows",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"inflows"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "586"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"24a-BzDlUVEPtzSDDHEsBh920bqyKiU\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 10 Sep 2021 06:19:07 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"date\": \"2021-09-10\",\n    \"reason\": \"PURCHASE\",\n    \"price\": 1000,\n    \"quantity\": 1,\n    \"additionalDetails\": \"\",\n    \"ingredient\": {\n        \"ingredientId\": \"6628c3e3-ac6e-4154-8cfd-ac5cebe1249f\",\n        \"name\": \"test new\",\n        \"currentStock\": 1,\n        \"measurementUnit\": {\n            \"id\": \"aa9eb1f1-0553-4a1b-b53c-488d3e179c59\",\n            \"name\": \"tablespoon\",\n            \"precision\": 1,\n            \"abbreviation\": \"tbpsn\",\n            \"ingredientsAssigned\": 2\n        },\n        \"ingredientState\": {\n            \"id\": \"9db59931-de33-4472-a91d-8f052132f0b5\",\n            \"name\": \"raw\",\n            \"ingredientsAssigned\": 2\n        },\n        \"ingredientType\": {\n            \"id\": \"f26980de-f731-4616-b868-65297658fcff\",\n            \"name\": \"solid\",\n            \"ingredientsAssigned\": 2\n        }\n    },\n    \"id\": \"edc4cbbd-37a4-4721-881a-334e2847c78b\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get inflows",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/inflows",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"inflows"
+							]
+						},
+						"description": "Get all available inflows in database."
+					},
+					"response": [
+						{
+							"name": "Get inflows [OK]",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/inflows",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"inflows"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "194"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"c2-zTYmKvNSVuiK2rD7tgyJPWbaRUM\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 10 Sep 2021 07:37:36 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": \"d99b3154-c89c-46a1-a1b6-263b97e3262e\",\n        \"ingredientId\": \"6628c3e3-ac6e-4154-8cfd-ac5cebe1249f\",\n        \"date\": \"2021-09-10\",\n        \"reason\": \"PURCHASE\",\n        \"price\": \"1000\",\n        \"quantity\": \"1\",\n        \"additionalDetails\": \"\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Delete inflow entry",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/inflows/3fd3c0ce-1ad3-4794-84c3-e26c7c9f9b1f",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"inflows",
+								"3fd3c0ce-1ad3-4794-84c3-e26c7c9f9b1f"
+							]
+						},
+						"description": "Delete an inflow entry. Deleting an inflow entry will decrease the current stock of the related ingredient by the quantity described in the inflow entry."
+					},
+					"response": [
+						{
+							"name": "Delete inflow entry [FAIL: resource not found]",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/inflows/3fd3c0ce-1ad3-4794-84c3-e26c7c9f9b1f",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"inflows",
+										"3fd3c0ce-1ad3-4794-84c3-e26c7c9f9b1f"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "114"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"72-jHhtNPf6YaeJq+sblGaZNg9FHF8\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 10 Sep 2021 09:48:18 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 404,\n    \"message\": \"Inflow with id '3fd3c0ce-1ad3-4794-84c3-e26c7c9f9b1f' not found\",\n    \"error\": \"Not Found\"\n}"
+						},
+						{
+							"name": "Delete inflow entry [OK]",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/inflows/3fd3c0ce-1ad3-4794-84c3-e26c7c9f9b1f",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"inflows",
+										"3fd3c0ce-1ad3-4794-84c3-e26c7c9f9b1f"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 10 Sep 2021 09:46:01 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				}
+			]
+		}
+	]
+}
