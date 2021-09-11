@@ -24,3 +24,4 @@ npm run start:dev
 ```
 
 A postman collection file, `postman_collection.json`, is also provided, you can import it in postman app to test the app.
+And/or you can also view the generated Postman API documentation through this site: https://documenter.getpostman.com/view/12186512/U16kqjix
