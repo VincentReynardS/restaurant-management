@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Ingredient } from 'src/ingredients/ingredient.entity';
 import { CreateInflowDto } from './dto/create-inflow.dto';
+import { DeleteInflowsDto } from './dto/delete-inflows-filter.dto';
 import { Inflow } from './inflow.entity';
 import { InflowRepository } from './inflow.repository';
 
@@ -44,5 +45,9 @@ export class InflowsService {
     if (result.affected === 0) {
       throw new NotFoundException(`Inflow with id '${id}' not found`);
     }
+  }
+
+  async deleteInflows(filterDto: DeleteInflowsDto): Promise<void> {
+    return this.inflowRepository.deleteInflows(filterDto);
   }
 }

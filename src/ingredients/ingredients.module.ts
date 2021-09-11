@@ -1,5 +1,6 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { InflowsModule } from 'src/inflows/inflows.module';
 import { IngredientStateRepository } from './ingredient-states/ingredient-state.repository';
 import { IngredientStatesController } from './ingredient-states/ingredient-states.controller';
 import { IngredientStatesService } from './ingredient-states/ingredient-states.service';
@@ -21,6 +22,7 @@ import { MeasurementUnitsService } from './measurement-units/measurement-units.s
       IngredientTypeRepository,
       IngredientRepository,
     ]),
+    forwardRef(() => InflowsModule),
   ],
   controllers: [
     MeasurementUnitsController,

@@ -9,6 +9,7 @@ import {
   Query,
   ValidationPipe,
 } from '@nestjs/common';
+import { InflowsService } from '../inflows/inflows.service';
 import { CreateIngredientDto } from './dto/create-ingredient.dto';
 import { GetIngredientsFilterDto } from './dto/get-ingredients-filter.dto';
 import { UpdateIngredientDto } from './dto/update-ingredient.dto';
@@ -25,6 +26,7 @@ export class IngredientsController {
     private measurementUnitsService: MeasurementUnitsService,
     private ingredientStatesService: IngredientStatesService,
     private ingredientTypesService: IngredientTypesService,
+    private inflowsService: InflowsService,
   ) {}
 
   @Post('')
@@ -84,6 +86,7 @@ export class IngredientsController {
     const ingredient = await this.ingredientsService.getIngredientById(id);
     const { measurementUnit, ingredientState, ingredientType } = ingredient;
 
+    await this.inflowsService.deleteInflows({ ingredientId: id });
     await this.ingredientsService.deleteIngredientById(id);
     await Promise.all([
       this.measurementUnitsService.updateMeasurementUnitIngredientsAssigned(

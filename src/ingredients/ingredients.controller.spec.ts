@@ -1,5 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { InflowsService } from '../inflows/inflows.service';
 import { IngredientStatesService } from './ingredient-states/ingredient-states.service';
 import { IngredientTypesService } from './ingredient-types/ingredient-types.service';
 import { IngredientsController } from './ingredients.controller';
@@ -27,12 +28,16 @@ const mockIngredientTypesService = () => ({
   getIngredientTypeById: jest.fn(),
   assignToIngredient: jest.fn(),
 });
+const mockInflowsService = () => ({
+  deleteInflows: jest.fn(),
+});
 
 describe('IngredientsController', () => {
   let ingredientsService;
   let measurementUnitsService;
   let ingredientStatesService;
   let ingredientTypesService;
+  let inflowsService;
   let ingredientsController;
 
   beforeEach(async () => {
@@ -52,6 +57,7 @@ describe('IngredientsController', () => {
           provide: IngredientTypesService,
           useFactory: mockIngredientTypesService,
         },
+        { provide: InflowsService, useFactory: mockInflowsService },
       ],
     }).compile();
 
@@ -65,6 +71,7 @@ describe('IngredientsController', () => {
     ingredientTypesService = module.get<IngredientTypesService>(
       IngredientTypesService,
     );
+    inflowsService = module.get<InflowsService>(InflowsService);
     ingredientsController = module.get<IngredientsController>(
       IngredientsController,
     );
